@@ -64,7 +64,7 @@ Partition::Partition(HyperGraph *graph) : graph(graph)
 
 void Partition::printPartition()
 {
-    std::cout << "left: [ ";
+    std::cout << "left:";
 
     for (int i = 1; i < int(partition.size()); i++)
     {
@@ -73,8 +73,8 @@ void Partition::printPartition()
             std::cout << i << " ";
         }
     }
-    std::cout << "]\n";
-    std::cout << "right: [ ";
+    std::cout << "\n";
+    std::cout << "right: ";
     for (int i = 1; i < int(partition.size()); i++)
     {
         if (!partition[i])
@@ -82,7 +82,7 @@ void Partition::printPartition()
             std::cout << i << " ";
         }
     }
-    std::cout << "]\n";
+    std::cout << "\n";
 }
 
 void Partition::printBucket()
