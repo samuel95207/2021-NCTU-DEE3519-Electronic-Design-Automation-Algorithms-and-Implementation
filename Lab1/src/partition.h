@@ -23,6 +23,8 @@ class Partition
 
     HyperGraph *graph;
     std::vector<bool> partition;
+    std::vector<bool> locklist;
+
 
     BucketList leftBucket;
     BucketList rightBucket;
@@ -36,4 +38,5 @@ public:
     int gain(int nodeId);
     void calculateGain();
     void changeSide(int nodeId);
+    void lock(int nodeId);
 };

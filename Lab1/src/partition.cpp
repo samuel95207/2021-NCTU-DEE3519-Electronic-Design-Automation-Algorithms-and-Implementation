@@ -57,7 +57,11 @@ Partition::Partition(HyperGraph *graph) : graph(graph)
     {
         // partition.push_back(i % 2);
         partition.push_back(i == 1 || i == 3 || i == 4 || i == 7);
+        locklist.push_back(false);
     }
+
+
+
     leftBucket.setPmax(graph->pinMax);
     rightBucket.setPmax(graph->pinMax);
 }
@@ -164,4 +168,8 @@ void Partition::calculateGain()
 
 void Partition::changeSide(int nodeId){
     partition[nodeId] = !partition[nodeId];
+}
+
+void Partition::lock(int nodeId){
+    locklist[nodeId] = true;
 }
