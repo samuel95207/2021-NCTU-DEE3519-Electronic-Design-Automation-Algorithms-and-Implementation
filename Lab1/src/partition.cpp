@@ -93,7 +93,7 @@ void Partition::printBucket()
     std::cout << "right: ";
     rightBucket.print();
 
-    std::cout << "]\n";
+    std::cout << "\n";
 }
 
 int Partition::gain(int nodeId)
