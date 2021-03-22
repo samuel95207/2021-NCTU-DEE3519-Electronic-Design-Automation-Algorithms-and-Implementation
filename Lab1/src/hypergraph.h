@@ -7,7 +7,7 @@
 struct Edge
 {
 
-    std::set<int> nodes;
+    std::set<int> * nodes;
     double weight;
 
     bool operator<(const Edge &a) const;
@@ -15,7 +15,7 @@ struct Edge
     bool operator==(const Edge &a) const;
 
     Edge();
-    Edge(std::set<int> &, double);
+    Edge(std::set<int> *, double);
 
     friend std::ostream &operator<<(std::ostream &out, const Edge &edge);
 };
@@ -42,16 +42,15 @@ class HyperGraph
     std::unordered_map<int, Node *> nodes;
     std::vector<Edge *> edges;
 
-    int nodeNum;
-    int edgeNum;
+    int nodeCount;
+    int edgeCount;
     double weightSum;
 
 public:
     HyperGraph();
-    HyperGraph(bool directed);
 
     void addNode(int id);
-    void addEdge(std::set<int>, double weight);
+    void addEdge(std::set<int>*, double weight);
 
     std::vector<int> getNodes();
     std::vector<int> getAdjNodes(int id);
