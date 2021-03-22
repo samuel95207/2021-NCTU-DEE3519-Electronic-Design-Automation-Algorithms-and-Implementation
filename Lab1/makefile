@@ -53,6 +53,10 @@ simplecase:
 	@make
 	@./bin/lab1 inputs/input_toy.hgr
 
+case1:
+	@make
+	@./bin/lab1 inputs/input1.txt.hgr
+
 case2:
 	@make
 	@./bin/lab1 inputs/input2.txt.hgr
