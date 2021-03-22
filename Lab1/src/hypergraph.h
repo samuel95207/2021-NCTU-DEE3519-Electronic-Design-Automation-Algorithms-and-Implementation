@@ -4,10 +4,12 @@
 #include <vector>
 #include <set>
 
+class Partition;
+
 struct Edge
 {
 
-    std::set<int> * nodes;
+    std::set<int> *nodes;
     double weight;
 
     bool operator<(const Edge &a) const;
@@ -26,6 +28,8 @@ class HyperGraph
     {
         int id;
         std::unordered_map<int, Edge *> edges;
+        std::vector<Edge *> edgelist;
+
 
     public:
         Node();
@@ -33,7 +37,7 @@ class HyperGraph
         Edge *addEdge(Edge *edge);
 
         std::vector<int> getAdjNodes();
-        std::vector<Edge> getEdges();
+        std::vector<Edge*> getEdges();
         int getId();
 
         friend class HyperGraph;
@@ -44,21 +48,25 @@ class HyperGraph
 
     int nodeCount;
     int edgeCount;
+    int pinSum = 0;
+    int pinMax = 0;
     double weightSum;
 
 public:
     HyperGraph();
 
     void addNode(int id);
-    void addEdge(std::set<int>*, double weight);
+    void addEdge(std::set<int> *, double weight);
 
     std::vector<int> getNodes();
     std::vector<int> getAdjNodes(int id);
 
-    std::vector<Edge> getEdges();
+    std::vector<Edge*> getEdges();
     Edge getEdge(int n1_id, int n2_id);
     double getEdgeWeight(int n1_id, int n2_id);
-    std::vector<Edge> getAdjEdges(int id);
+    std::vector<Edge*> getAdjEdges(int id);
 
     friend std::ostream &operator<<(std::ostream &out, const HyperGraph &graph);
+
+    friend class Partition;
 };

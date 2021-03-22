@@ -40,6 +40,9 @@ std::ostream &operator<<(std::ostream &out, const Edge &edge)
     return out;
 }
 
+
+
+
 // Member functions for HyperGraph::Node
 HyperGraph::Node::Node()
 {
@@ -62,18 +65,9 @@ std::vector<int> HyperGraph::Node::getAdjNodes()
     return result;
 }
 
-std::vector<Edge> HyperGraph::Node::getEdges()
+std::vector<Edge*> HyperGraph::Node::getEdges()
 {
-    std::vector<Edge> result;
-    for (auto iter = edges.begin(); iter != edges.end(); iter++)
-    {
-        auto edge = *(iter->second);
-        if (find(result.begin(), result.end(), edge) == result.end())
-        {
-            result.push_back(edge);
-        }
-    }
-    return result;
+    return edgelist;
 }
 
 int HyperGraph::Node::getId()
@@ -83,7 +77,7 @@ int HyperGraph::Node::getId()
 
 Edge *HyperGraph::Node::addEdge(Edge *edge)
 {
-
+    edgelist.push_back(edge);
     for (auto node : *(edge->nodes))
     {
         if (node == id)
@@ -95,6 +89,10 @@ Edge *HyperGraph::Node::addEdge(Edge *edge)
     }
     return edge;
 }
+
+
+
+
 
 //Member functions for HyperGraph
 HyperGraph::HyperGraph()
@@ -113,14 +111,21 @@ void HyperGraph::addNode(int id)
 void HyperGraph::addEdge(std::set<int>* nodes_in, double weight = 1)
 {
     Edge *edge = new Edge(nodes_in, weight);
+
+    int pinCount = 0;
     for (auto node : *(edge->nodes))
     {
         auto node_iter = nodes.find(node);
         if (node_iter == nodes.end())
         {
-            nodes[node] = new Node(node);
+            addNode(node);
         }
         nodes[node]->addEdge(edge);
+        pinCount++;
+    }
+    pinSum += pinCount;
+    if(pinCount > pinMax){
+        pinMax = pinCount;
     }
 
     edges.push_back(edge);
@@ -147,14 +152,14 @@ std::vector<int> HyperGraph::getAdjNodes(int id)
     return nodes[id]->getAdjNodes();
 }
 
-std::vector<Edge> HyperGraph::getEdges()
+std::vector<Edge*> HyperGraph::getEdges()
 {
-    std::vector<Edge> result;
+    std::vector<Edge*> result;
     result.resize(edges.size());
     int index = 0;
     for (auto iter = edges.begin(); iter != edges.end(); iter++)
     {
-        result[index] = **(iter);
+        result[index] = *(iter);
         index++;
     }
     return result;
@@ -170,7 +175,7 @@ double HyperGraph::getEdgeWeight(int n1_id, int n2_id)
     return getEdge(n1_id, n2_id).weight;
 }
 
-std::vector<Edge> HyperGraph::getAdjEdges(int id)
+std::vector<Edge*> HyperGraph::getAdjEdges(int id)
 {
     return nodes[id]->getEdges();
 }
@@ -178,6 +183,10 @@ std::vector<Edge> HyperGraph::getAdjEdges(int id)
 std::ostream &operator<<(std::ostream &out, const HyperGraph &graph)
 {
     auto nodes = graph.nodes;
+
+    out<<"pinSum: "<<graph.pinSum<<std::endl;
+    out<<"pinMax: "<<graph.pinMax<<std::endl;
+
 
     for (auto iter = nodes.begin(); iter != nodes.end(); iter++)
     {
