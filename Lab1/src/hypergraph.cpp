@@ -10,7 +10,7 @@
 #include <ctime>
 
 // Member function for Edge
-Edge::Edge(std::set<int> &nodes, double weight) : nodes(nodes), weight(weight) {}
+Edge::Edge(std::set<int> *nodes, double weight) : nodes(nodes), weight(weight) {}
 
 Edge::Edge() {}
 
@@ -32,7 +32,7 @@ bool Edge::operator>(const Edge &a) const
 std::ostream &operator<<(std::ostream &out, const Edge &edge)
 {
     std::cout << "{ ";
-    for (auto node : edge.nodes)
+    for (auto node : *(edge.nodes))
     {
         std::cout << node << " ";
     }
@@ -84,7 +84,7 @@ int HyperGraph::Node::getId()
 Edge *HyperGraph::Node::addEdge(Edge *edge)
 {
 
-    for (auto node : edge->nodes)
+    for (auto node : *(edge->nodes))
     {
         if (node == id)
         {
@@ -99,45 +99,55 @@ Edge *HyperGraph::Node::addEdge(Edge *edge)
 //Member functions for HyperGraph
 HyperGraph::HyperGraph()
 {
-    nodeNum = 0;
-    edgeNum = 0;
+    nodeCount = 0;
+    edgeCount = 0;
+    nodes = new std::vector<HyperGraph::Node *>(nodeCount);
+    edges = new std::vector<Edge *>(edgeCount);
+}
+
+HyperGraph::HyperGraph(int nodeCount_in)
+{
+    nodeCount = nodeCount_in;
+    edgeCount = 0;
+    nodes = new std::vector<HyperGraph::Node *>(nodeCount);
+    edges = new std::vector<Edge *>(edgeCount);
+    
+    for (int i = 0;i < nodeCount;i++)
+    {
+        (*nodes)[i] = new Node; 
+    }
 }
 
 void HyperGraph::addNode(int id)
 {
     auto node = new Node(id);
-    nodes[id] = node;
-    nodeNum++;
+    (*nodes)[id] = node;
+    nodeCount++;
 }
 
-void HyperGraph::addEdge(std::set<int> nodes_in, double weight = 1)
+void HyperGraph::addEdge(std::set<int> *nodes_in, double weight = 1)
 {
     Edge *edge = new Edge(nodes_in, weight);
-
-    for (auto node : edge->nodes)
+    
+    for (auto node : *(edge->nodes))
     {
-        auto node_iter = nodes.find(node);
-        if (node_iter == nodes.end())
-        {
-            nodes[node] = new Node(node);
-        }
-        nodes[node]->addEdge(edge);
+        (*nodes)[node-1]->addEdge(edge);
     }
 
-    edges.push_back(edge);
+    (*edges).push_back(edge);
 
-    edgeNum += 1;
+    edgeCount += 1;
     weightSum += weight;
 }
 
 std::vector<int> HyperGraph::getNodes()
 {
     std::vector<int> result;
-    result.resize(nodes.size());
+    result.resize((*nodes).size());
     int index = 0;
-    for (auto iter = nodes.begin(); iter != nodes.end(); iter++)
+    for (auto iter = (*nodes).begin(); iter != (*nodes).end(); iter++)
     {
-        result[index] = iter->first;
+        result[index] = (*iter)->id;
         index++;
     }
     return result;
@@ -145,15 +155,15 @@ std::vector<int> HyperGraph::getNodes()
 
 std::vector<int> HyperGraph::getAdjNodes(int id)
 {
-    return nodes[id]->getAdjNodes();
+    return (*nodes)[id]->getAdjNodes();
 }
 
 std::vector<Edge> HyperGraph::getEdges()
 {
     std::vector<Edge> result;
-    result.resize(edges.size());
+    result.resize((*edges).size());
     int index = 0;
-    for (auto iter = edges.begin(); iter != edges.end(); iter++)
+    for (auto iter = (*edges).begin(); iter != (*edges).end(); iter++)
     {
         result[index] = **(iter);
         index++;
@@ -163,7 +173,7 @@ std::vector<Edge> HyperGraph::getEdges()
 
 Edge HyperGraph::getEdge(int n1_id, int n2_id)
 {
-    return *(nodes[n1_id]->edges[n2_id]);
+    return *((*nodes)[n1_id]->edges[n2_id]);
 }
 
 double HyperGraph::getEdgeWeight(int n1_id, int n2_id)
@@ -173,16 +183,16 @@ double HyperGraph::getEdgeWeight(int n1_id, int n2_id)
 
 std::vector<Edge> HyperGraph::getAdjEdges(int id)
 {
-    return nodes[id]->getEdges();
+    return (*nodes)[id]->getEdges();
 }
 
 std::ostream &operator<<(std::ostream &out, const HyperGraph &graph)
 {
     auto nodes = graph.nodes;
 
-    for (auto iter = nodes.begin(); iter != nodes.end(); iter++)
+    for (auto iter = (*nodes).begin(); iter != (*nodes).end(); iter++)
     {
-        auto node = iter->second;
+        auto node = *iter;
         auto edges = node->getEdges();
 
         out << node->getId() << ": ";
