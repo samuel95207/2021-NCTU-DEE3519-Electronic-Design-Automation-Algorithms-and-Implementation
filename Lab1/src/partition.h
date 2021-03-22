@@ -35,4 +35,5 @@ public:
 
     int gain(int nodeId);
     void calculateGain();
+    void changeSide(int nodeId);
 };

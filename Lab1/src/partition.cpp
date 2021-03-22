@@ -161,3 +161,7 @@ void Partition::calculateGain()
         }
     }
 }
+
+void Partition::changeSide(int nodeId){
+    partition[nodeId] = !partition[nodeId];
+}
