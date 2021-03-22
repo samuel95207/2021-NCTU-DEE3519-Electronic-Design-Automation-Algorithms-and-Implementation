@@ -1,4 +1,5 @@
 #include <vector>
+#include <climits>
 
 #include "hypergraph.h"
 
@@ -8,6 +9,7 @@ class Partition
     {
         int pinMax = 0;
         std::vector<std::vector<int>> bucket;
+        int maxGain = INT_MIN;
 
     public:
         BucketList();

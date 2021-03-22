@@ -18,21 +18,25 @@ void Partition::BucketList::setPmax(int pinMax_in)
 void Partition::BucketList::clear()
 {
     int size = bucket.size();
-    for (int i = 0;i < size;i++)
+    for (int i = 0; i < size; i++)
     {
         bucket[i].clear();
     }
+    maxGain = INT_MIN;
 }
 
 void Partition::BucketList::insert(int gain, int nodeId)
 {
     bucket[gain + pinMax].push_back(nodeId);
-    // std::cout << bucket.size() << "\n";
+    if (gain + pinMax > maxGain)
+    {
+        maxGain = gain;
+    }
 }
 
 void Partition::BucketList::print()
 {
-    std::cout << "{\n";
+    std::cout << "\tmaxGain: " << maxGain << "\n";
     for (int i = bucket.size() - 1; i >= 0; i--)
     {
         auto list = bucket[i];
@@ -43,7 +47,7 @@ void Partition::BucketList::print()
         }
         std::cout << "]\n";
     }
-    std::cout << "}\n";
+    std::cout << "\n";
 }
 
 // Partition Member functions
@@ -62,7 +66,7 @@ void Partition::printPartition()
 {
     std::cout << "left: [ ";
 
-    for (int i = 1; i < partition.size(); i++)
+    for (int i = 1; i < int(partition.size()); i++)
     {
         if (partition[i])
         {
@@ -71,7 +75,7 @@ void Partition::printPartition()
     }
     std::cout << "]\n";
     std::cout << "right: [ ";
-    for (int i = 1; i < partition.size(); i++)
+    for (int i = 1; i < int(partition.size()); i++)
     {
         if (!partition[i])
         {
