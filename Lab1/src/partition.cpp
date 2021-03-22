@@ -28,6 +28,7 @@ void Partition::BucketList::clear()
 void Partition::BucketList::insert(int gain, int nodeId)
 {
     bucket[gain + pinMax].push_back(nodeId);
+    bucketPosList[nodeId] = std::pair<int, int>(gain, bucket[gain + pinMax].size()-1);
     if (gain + pinMax > maxGain)
     {
         maxGain = gain;

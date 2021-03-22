@@ -1,5 +1,6 @@
 #include <vector>
 #include <climits>
+#include <utility> 
 
 #include "hypergraph.h"
 
@@ -9,6 +10,7 @@ class Partition
     {
         int pinMax = 0;
         std::vector<std::vector<int>> bucket;
+        std::unordered_map<int, std::pair<int, int>> bucketPosList;
         int maxGain = INT_MIN;
 
     public:
