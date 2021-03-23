@@ -52,22 +52,14 @@ HyperGraph::Node::Node(int id) : id(id)
 {
 }
 
-std::vector<int> HyperGraph::Node::getAdjNodes()
+std::set<int> HyperGraph::Node::getAdjNodes()
 {
-    std::vector<int> result;
-    result.resize(edges.size());
-    int index = 0;
-    for (auto iter = edges.begin(); iter != edges.end(); iter++)
-    {
-        result[index] = iter->first;
-        index++;
-    }
-    return result;
+    return adjNodeList;
 }
 
 std::vector<Edge*> HyperGraph::Node::getEdges()
 {
-    return edgelist;
+    return edgeList;
 }
 
 int HyperGraph::Node::getId()
@@ -77,7 +69,7 @@ int HyperGraph::Node::getId()
 
 Edge *HyperGraph::Node::addEdge(Edge *edge)
 {
-    edgelist.push_back(edge);
+    edgeList.push_back(edge);
     for (auto node : *(edge->nodes))
     {
         if (node == id)
@@ -85,6 +77,7 @@ Edge *HyperGraph::Node::addEdge(Edge *edge)
             continue;
         }
         edges[node] = edge;
+        adjNodeList.insert(node);
         // std::cout<<id<<" add edge "<<*edge<<" to "<<node<<std::endl;
     }
     return edge;
@@ -147,7 +140,7 @@ std::vector<int> HyperGraph::getNodes()
     return result;
 }
 
-std::vector<int> HyperGraph::getAdjNodes(int id)
+std::set<int> HyperGraph::getAdjNodes(int id)
 {
     return nodes[id]->getAdjNodes();
 }

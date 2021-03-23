@@ -28,7 +28,8 @@ class HyperGraph
     {
         int id;
         std::unordered_map<int, Edge *> edges;
-        std::vector<Edge *> edgelist;
+        std::vector<Edge *> edgeList;
+        std::set<int> adjNodeList;
 
 
     public:
@@ -36,7 +37,7 @@ class HyperGraph
         Node(int id);
         Edge *addEdge(Edge *edge);
 
-        std::vector<int> getAdjNodes();
+        std::set<int> getAdjNodes();
         std::vector<Edge*> getEdges();
         int getId();
 
@@ -59,7 +60,7 @@ public:
     void addEdge(std::set<int> *, double weight);
 
     std::vector<int> getNodes();
-    std::vector<int> getAdjNodes(int id);
+    std::set<int> getAdjNodes(int id);
 
     std::vector<Edge*> getEdges();
     Edge getEdge(int n1_id, int n2_id);
