@@ -48,19 +48,18 @@ void Partition::BucketList::update(int nodeId, int gain)
 void Partition::BucketList::remove(int nodeId)
 {
     // std::cout<<"remove: "<<nodeId<<"\n";
-    if(bucketPosList.find(nodeId) == bucketPosList.end()){
-            std::cout<<"cannot find: "<<nodeId<<"\n";
-            return;
+    if (bucketPosList.find(nodeId) == bucketPosList.end())
+    {
+        std::cout << "cannot find: " << nodeId << "\n";
+        return;
     }
     auto nodePos = bucketPosList[nodeId];
-    bucketPosList.erase(nodeId); 
+    bucketPosList.erase(nodeId);
     // std::cout<<"pos: "<<nodePos.first<<" "<<nodePos.second<<"\n";
 
     bucketPosList[bucket[nodePos.first][bucket[nodePos.first].size() - 1]] = nodePos;
     std::swap(bucket[nodePos.first][nodePos.second], bucket[nodePos.first][bucket[nodePos.first].size() - 1]);
     bucket[nodePos.first].pop_back();
-
-    
 
     // for(auto node : bucket[nodePos.first]){
     //     std::cout<<node<<" ";
@@ -87,10 +86,11 @@ void Partition::BucketList::print()
     for (int i = bucket.size() - 1; i >= 0; i--)
     {
         auto list = bucket[i];
-        if(!list.size()){
+        if (!list.size())
+        {
             continue;
         }
-        std::cout << "\t" << (i - pinMax) <<" size: "<<list.size()<< ":\t[ ";
+        std::cout << "\t" << (i - pinMax) << " size: " << list.size() << ":\t[ ";
         for (auto node : list)
         {
             std::cout << node << " ";
@@ -139,7 +139,7 @@ Partition::Partition(HyperGraph *graph, double balanceFactor) : graph(graph)
         std::swap(areaConstrain.first, areaConstrain.second);
     }
 
-    std::cout<<"Area Constrain: "<<areaConstrain.first<<" "<<areaConstrain.second<<'\n';
+    std::cout << "Area Constrain: " << areaConstrain.first << " " << areaConstrain.second << '\n';
 
     maxPartition = partition;
 }
@@ -311,7 +311,7 @@ void Partition::FM_Algorithm()
     int count = 0;
     while (!checkAllLock())
     {
-        std::cout<<"\n------------loop "<<count<<"------------\n";
+        // std::cout<<"\n------------loop "<<count<<"------------\n";
         auto max = getMaxGainNodeFromBucketlist();
         // printBucket();
         int maxNode = max.first;
@@ -319,22 +319,21 @@ void Partition::FM_Algorithm()
 
         if (maxNode == -1)
         {
-            std::cout<<"Bucket Empty\n";
+            std::cout << "Bucket Empty\n";
             break;
         }
 
-        std::cout << "Change and lock Node: " << maxNode << "\n";
-        std::cout << "Gain: " << gain << "\n";
-        std::cout << "GainSum: " << gainSum << "\n";
-        std::cout << "BestGainSum: " << maxGainSum << "\n";
-
-
+        // std::cout << "Change and lock Node: " << maxNode << "\n";
+        // std::cout << "Gain: " << gain << "\n";
+        // std::cout << "GainSum: " << gainSum << "\n";
+        // std::cout << "BestGainSum: " << maxGainSum << "\n";
 
         changeSide(maxNode);
         lock(maxNode);
 
         gainSum += gain;
-        if(gainSum > maxGainSum){
+        if (gainSum > maxGainSum)
+        {
             maxGainSum = gainSum;
             maxPartition = partition;
         }
@@ -345,13 +344,12 @@ void Partition::FM_Algorithm()
 
         // printBucket();
 
-        std::cout<<"--------------------------------\n";
+        // std::cout<<"--------------------------------\n";
 
         count++;
-
     }
 
-    std::cout<<"maxGainSum: "<<maxGainSum<<std::endl;
+    std::cout << "maxGainSum: " << maxGainSum << std::endl;
 }
 
 std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
@@ -368,7 +366,7 @@ std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
         {
             return std::pair<int, int>(-1, 0);
         }
-        
+
         if (leftMax > rightMax)
         {
             maxGain = leftMax;
@@ -377,7 +375,7 @@ std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
             {
                 continue;
             }
-            for(auto node : leftBucket.bucket[maxGainIndex])
+            for (auto node : leftBucket.bucket[maxGainIndex])
             {
                 changeSide(node);
                 if (checkBalance())
@@ -404,7 +402,7 @@ std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
             {
                 continue;
             }
-            for(auto node : rightBucket.bucket[maxGainIndex])
+            for (auto node : rightBucket.bucket[maxGainIndex])
             {
                 changeSide(node);
                 if (checkBalance())
@@ -414,7 +412,7 @@ std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
                     changeSide(node);
                     rightBucket.remove(node);
                     // std::cout<<" size: "<<rightBucket.bucket[maxGainIndex].size()<<"\n";
-                    
+
                     return std::pair<int, int>(node, maxGain);
                 }
                 else
@@ -425,14 +423,14 @@ std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
             rightMax--;
         }
     }
-
-    
 }
 
-std::ostream &operator<<(std::ostream &out, const Partition &P){
+std::ostream &operator<<(std::ostream &out, const Partition &P)
+{
     int size = P.partition.size();
-    for(int i = 1;i < size;i++){
-        out<<P.maxPartition[i]<<'\n';
+    for (int i = 1; i < size; i++)
+    {
+        out << P.maxPartition[i] << '\n';
     }
     return out;
 }

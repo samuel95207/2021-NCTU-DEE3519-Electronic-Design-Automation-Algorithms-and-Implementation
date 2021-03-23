@@ -7,7 +7,6 @@
 
 #include "./partition.h"
 
-
 using namespace std;
 
 int main(int argc, char **argv)
@@ -45,18 +44,14 @@ int main(int argc, char **argv)
     auto timeInput = std::clock();
     cout << "Input time: " << (timeInput - timestart) / (double)CLOCKS_PER_SEC << endl;
 
-
-    Partition P(&G,0.46);
+    Partition P(&G, 0.46);
     P.FM_Algorithm();
-
 
     auto timeGain = std::clock();
     cout << "gain time: " << (timeGain - timeInput) / (double)CLOCKS_PER_SEC << endl;
 
-
     ofstream outfile("output.txt");
-    outfile<<P;
-
+    outfile << P;
 
     auto timeOutput = std::clock();
     cout << "Output time: " << (timeOutput - timeGain) / (double)CLOCKS_PER_SEC << endl;
