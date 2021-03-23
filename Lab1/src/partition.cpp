@@ -357,7 +357,6 @@ std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
     int leftMax = leftBucket.maxGain;
     int rightMax = rightBucket.maxGain;
     int maxGain;
-    int maxNode;
     // std::cout << leftMax << " " << rightMax << "\n";
     while (true)
     {
