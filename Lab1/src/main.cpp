@@ -40,23 +40,24 @@ int main(int argc, char **argv)
         G.addEdge(nodes, 1);
     }
 
-    auto timeIO = std::clock();
-    cout << "IO time: " << (timeIO - timestart) / (double)CLOCKS_PER_SEC << endl;
+    infile.close();
+
+    auto timeInput = std::clock();
+    cout << "Input time: " << (timeInput - timestart) / (double)CLOCKS_PER_SEC << endl;
 
 
-    Partition P(&G);
-    P.calculateGain();
+    Partition P(&G,0.46);
+    P.FM_Algorithm();
+
 
     auto timeGain = std::clock();
-    cout << "gain time: " << (timeGain - timeIO) / (double)CLOCKS_PER_SEC << endl;
-
-    P.printPartition();
-    P.printBucket();
-
-    // cout<<G<<endl;
+    cout << "gain time: " << (timeGain - timeInput) / (double)CLOCKS_PER_SEC << endl;
 
 
+    ofstream outfile("output.txt");
+    outfile<<P;
 
-    // cout<<G<<endl;
-    // cout<<G.getEdge(1,3)<<endl;
+
+    auto timeOutput = std::clock();
+    cout << "Output time: " << (timeOutput - timeGain) / (double)CLOCKS_PER_SEC << endl;
 }
