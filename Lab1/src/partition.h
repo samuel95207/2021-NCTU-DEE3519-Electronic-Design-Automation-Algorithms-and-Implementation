@@ -1,6 +1,6 @@
 #include <vector>
 #include <climits>
-#include <utility> 
+#include <utility>
 
 #include "hypergraph.h"
 
@@ -19,9 +19,9 @@ class Partition
         void setPmax(int pinMax);
 
         void clear();
-        void insert( int nodeId, int gain);
-        void update( int nodeId, int gain);
-        void remove( int nodeId);
+        void insert(int nodeId, int gain);
+        void update(int nodeId, int gain);
+        void remove(int nodeId);
 
         void print();
 
@@ -39,7 +39,6 @@ class Partition
 
     std::pair<int, int> areaConstrain;
 
-
     BucketList leftBucket;
     BucketList rightBucket;
 
@@ -48,7 +47,7 @@ class Partition
     std::vector<bool> maxPartition;
 
 public:
-    Partition(HyperGraph *graph, double balanceFactor=0.5);
+    Partition(HyperGraph *graph, double balanceFactor = 0.5);
 
     void printPartition();
     void printBucket();
@@ -64,4 +63,6 @@ public:
 
     void FM_Algorithm();
     std::pair<int, int> getMaxGainNodeFromBucketlist();
+
+    friend std::ostream &operator<<(std::ostream &out, const Partition &P);
 };
