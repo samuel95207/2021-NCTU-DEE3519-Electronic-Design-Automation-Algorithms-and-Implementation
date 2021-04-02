@@ -48,9 +48,9 @@ HyperGraph::Node::Node(int id) : id(id)
 {
 }
 
-std::set<int> HyperGraph::Node::getAdjNodes()
+std::set<int> *HyperGraph::Node::getAdjNodes()
 {
-    return adjNodeList;
+    return &adjNodeList;
 }
 
 std::vector<Edge *> HyperGraph::Node::getEdges()
@@ -133,7 +133,7 @@ std::vector<int> HyperGraph::getNodes()
     return result;
 }
 
-std::set<int> HyperGraph::getAdjNodes(int id)
+std::set<int> *HyperGraph::getAdjNodes(int id)
 {
     return nodes[id]->getAdjNodes();
 }
