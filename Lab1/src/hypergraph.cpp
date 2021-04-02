@@ -72,7 +72,7 @@ Edge *HyperGraph::Node::addEdge(Edge *edge)
         {
             continue;
         }
-        edges[node] = edge;
+        // edges[node] = edge;
         adjNodeList.insert(node);
         // std::cout<<id<<" add edge "<<*edge<<" to "<<node<<std::endl;
     }
@@ -151,15 +151,15 @@ std::vector<Edge *> HyperGraph::getEdges()
     return result;
 }
 
-Edge HyperGraph::getEdge(int n1_id, int n2_id)
-{
-    return *(nodes[n1_id]->edges[n2_id]);
-}
+// Edge HyperGraph::getEdge(int n1_id, int n2_id)
+// {
+//     return *(nodes[n1_id]->edges[n2_id]);
+// }
 
-double HyperGraph::getEdgeWeight(int n1_id, int n2_id)
-{
-    return getEdge(n1_id, n2_id).weight;
-}
+// double HyperGraph::getEdgeWeight(int n1_id, int n2_id)
+// {
+//     return getEdge(n1_id, n2_id).weight;
+// }
 
 std::vector<Edge *> HyperGraph::getAdjEdges(int id)
 {
