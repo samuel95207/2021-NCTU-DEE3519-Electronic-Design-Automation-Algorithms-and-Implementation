@@ -272,7 +272,7 @@ int Partition::iterate(int TLE)
         avgFMTime = timeSum / count;
     }
 
-    std::cout << "Average FM time: " << avgFMTime << std::endl;
+    std::cout << "Average FM time: " << avgFMTime / (double)CLOCKS_PER_SEC << std::endl;
     return count;
 }
 
