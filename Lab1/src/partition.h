@@ -67,7 +67,7 @@ public:
     void reset();
 
     void FM_Algorithm();
-    void iterate(int count);
+    int iterate(int TLE);
     std::pair<int, int> getMaxGainNodeFromBucketlist();
 
     friend std::ostream &operator<<(std::ostream &out, const Partition &P);
