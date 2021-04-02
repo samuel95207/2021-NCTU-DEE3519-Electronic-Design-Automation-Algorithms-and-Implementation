@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
+#include <ctime>
 
 #include "partition.h"
 
@@ -21,16 +22,17 @@ int Partition::gain(int nodeId)
 
         for (auto node : *nodeSet)
         {
-            if(node == nodeId){
+            if (node == nodeId)
+            {
                 continue;
             }
-            if(!TE_flag  && !FS_flag){
+            if (!TE_flag && !FS_flag)
+            {
                 break;
             }
             if (partition[node] != side)
             {
                 TE_flag = false;
-               
             }
             if (partition[node] == side && node != nodeId)
             {
@@ -83,16 +85,29 @@ void Partition::calculateInitialGain()
     }
 }
 
-void Partition::calculateGain(std::set<int> nodes)
+void Partition::calculateGain(std::set<int> *nodes)
 {
-    for (auto node : nodes)
+    // std::cout<<"AdjNode count: "<< nodes->size()<<"\n";
+    int checkTimeSum = 0;
+    int gainTimeSum = 0;
+    int updateTimeSum = 0;
+
+    for (auto node : *nodes)
     {
+
+        auto starttime = clock();
+
         if (checkLock(node))
         {
             // std::cout<<node<<" is locked\n";
             continue;
         }
+
+        auto checktime = clock();
+
         int nodegain = gain(node);
+
+        auto gaintime = clock();
 
         if (partition[node])
         {
@@ -102,7 +117,21 @@ void Partition::calculateGain(std::set<int> nodes)
         {
             rightBucket.update(node, nodegain);
         }
+
+        auto updatetime = clock();
+
+        checkTimeSum += checktime-starttime;
+        gainTimeSum += gaintime-checktime;
+        updateTimeSum += updatetime-gaintime;
     }
+
+    if(nodes->size() > 1000){
+    std::cout << "check time: " << checkTimeSum / (double)CLOCKS_PER_SEC << std::endl;
+    std::cout << "gain time: " << gainTimeSum / (double)CLOCKS_PER_SEC << std::endl;
+    std::cout << "update time: " << updateTimeSum / (double)CLOCKS_PER_SEC << std::endl<<std::endl;
+    }
+
+    
 }
 
 void Partition::changeSide(int nodeId)
@@ -141,7 +170,8 @@ bool Partition::checkAllLock()
     return lockCount == graph->nodeCount;
 }
 
-void Partition::reset(){
+void Partition::reset()
+{
     leftBucket.clear();
     rightBucket.clear();
     lockCount = 0;
@@ -163,10 +193,23 @@ void Partition::FM_Algorithm()
     // std::cout << leftBucket.maxGain << " " << rightBucket.maxGain << std::endl;
 
     int count = 0;
+    double GetMaxGainNodeFromBucketlist_timesum = 0;
+    double ChangeSideAndLock_timesum = 0;
+    double CopyMaxPartition_timesum = 0;
+    double GetAdjNodes_timesum = 0;
+    double CalculateGain_timesum = 0;
+    double Total_timesum = 0;
+
     while (!checkAllLock())
     {
-        
+        // std::cout << "------------loop " << count << "------------\n";
+
+        auto timestart = clock();
+
         auto max = getMaxGainNodeFromBucketlist();
+
+        auto timeGetMaxGainNodeFromBucketlist = std::clock();
+
         int maxNode = max.first;
         int gain = max.second;
 
@@ -176,9 +219,10 @@ void Partition::FM_Algorithm()
             break;
         }
 
-
         changeSide(maxNode);
         lock(maxNode);
+
+        auto timeChangeSideAndLock = std::clock();
 
         gainSum += gain;
         if (gainSum > maxGainSum)
@@ -189,29 +233,52 @@ void Partition::FM_Algorithm()
             maxPartitionRightCount = rightCount;
         }
 
+        auto timeCopyMaxPartition = std::clock();
+
         auto adjNodes = graph->getAdjNodes(maxNode);
+
+        auto timeGetAdjNodes = std::clock();
 
         calculateGain(adjNodes);
 
+        auto timeCalculateGain = std::clock();
 
-        // std::cout << "\n------------loop " << count << "------------\n";
         // std::cout << "Change and lock Node: " << maxNode << "\n";
         // std::cout << "Gain: " << gain << "\n";
         // std::cout << "lockCount: " << lockCount << "\n";
         // std::cout << "GainSum: " << gainSum << "\n";
         // std::cout << "BestGainSum: " << maxGainSum << "\n";
-        // std::cout << "--------------------------------\n";
-
-        
+        // std::cout << "GetMaxGainNodeFromBucketlist time: " << (timeGetMaxGainNodeFromBucketlist - timestart) / (double)CLOCKS_PER_SEC << std::endl;
+        // std::cout << "ChangeSideAndLock time: " << (timeChangeSideAndLock - timeGetMaxGainNodeFromBucketlist) / (double)CLOCKS_PER_SEC << std::endl;
+        // std::cout << "CopyMaxPartition time: " << (timeCopyMaxPartition - timeChangeSideAndLock) / (double)CLOCKS_PER_SEC << std::endl;
+        // std::cout << "GetAdjNodes time: " << (timeGetAdjNodes - timeCopyMaxPartition) / (double)CLOCKS_PER_SEC << std::endl;
+        // std::cout << "CalculateGain time: " << (timeCalculateGain - timeGetAdjNodes) / (double)CLOCKS_PER_SEC << std::endl;
+        // std::cout << "Total time: " << (timeCalculateGain - timestart) / (double)CLOCKS_PER_SEC << std::endl;
+        // GetMaxGainNodeFromBucketlist_timesum += timeGetMaxGainNodeFromBucketlist - timestart;
+        // ChangeSideAndLock_timesum += timeChangeSideAndLock - timeGetMaxGainNodeFromBucketlist;
+        // CopyMaxPartition_timesum += timeCopyMaxPartition - timeChangeSideAndLock;
+        // GetAdjNodes_timesum += timeGetAdjNodes - timeCopyMaxPartition;
+        // CalculateGain_timesum += timeCalculateGain - timeGetAdjNodes;
+        // Total_timesum += timeCalculateGain - timestart;
+        // std::cout << "--------------------------------\n\n";
 
         count++;
     }
 
+    // std::cout << "GetMaxGainNodeFromBucketlist time: " << GetMaxGainNodeFromBucketlist_timesum / (double)CLOCKS_PER_SEC << std::endl;
+    // std::cout << "ChangeSideAndLock time: " << ChangeSideAndLock_timesum / (double)CLOCKS_PER_SEC << std::endl;
+    // std::cout << "CopyMaxPartition time: " << CopyMaxPartition_timesum / (double)CLOCKS_PER_SEC << std::endl;
+    // std::cout << "GetAdjNodes time: " << GetAdjNodes_timesum / (double)CLOCKS_PER_SEC << std::endl;
+    // std::cout << "CalculateGain time: " << CalculateGain_timesum / (double)CLOCKS_PER_SEC << std::endl;
+    // std::cout << "Total time: " << Total_timesum / (double)CLOCKS_PER_SEC << std::endl;
+
     std::cout << "maxGainSum: " << maxGainSum << std::endl;
 }
 
-void Partition::iterate(int count){
-    for(int i = 0;i < count; i++){
+void Partition::iterate(int count)
+{
+    for (int i = 0; i < count; i++)
+    {
         partition = maxPartition;
         FM_Algorithm();
         reset();

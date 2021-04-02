@@ -45,10 +45,10 @@ int main(int argc, char **argv)
     cout << "Input time: " << (timeInput - timestart) / (double)CLOCKS_PER_SEC << endl;
 
     Partition P(&G, 0.46);
-    P.iterate(15);
+    P.iterate(1);
 
     auto timeGain = std::clock();
-    cout << "gain time: " << (timeGain - timeInput) / (double)CLOCKS_PER_SEC << endl;
+    cout << "FM time: " << (timeGain - timeInput) / (double)CLOCKS_PER_SEC << endl;
 
     ofstream outfile("output.txt");
     outfile << P;

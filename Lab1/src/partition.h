@@ -58,7 +58,7 @@ public:
 
     int gain(int nodeId);
     void calculateInitialGain();
-    void calculateGain(std::set<int> nodes);
+    void calculateGain(std::set<int> * nodes);
     void changeSide(int nodeId);
     void lock(int nodeId);
     bool checkBalance();
