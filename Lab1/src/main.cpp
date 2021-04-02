@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     cout << "Input time: " << (timeInput - timestart) / (double)CLOCKS_PER_SEC << endl;
 
     Partition P(&G, 0.46);
-    P.FM_Algorithm();
+    P.iterate(15);
 
     auto timeGain = std::clock();
     cout << "gain time: " << (timeGain - timeInput) / (double)CLOCKS_PER_SEC << endl;

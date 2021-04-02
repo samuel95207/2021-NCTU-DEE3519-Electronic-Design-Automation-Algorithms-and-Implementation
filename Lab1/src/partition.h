@@ -43,8 +43,12 @@ class Partition
     BucketList rightBucket;
 
     int gainSum = 0;
+
     int maxGainSum = INT_MIN;
     std::vector<bool> maxPartition;
+    int maxPartitionLeftCount;
+    int maxPartitionRightCount;
+
 
 public:
     Partition(HyperGraph *graph, double balanceFactor = 0.5);
@@ -60,8 +64,10 @@ public:
     bool checkBalance();
     bool checkLock(int nodeId);
     bool checkAllLock();
+    void reset();
 
     void FM_Algorithm();
+    void iterate(int count);
     std::pair<int, int> getMaxGainNodeFromBucketlist();
 
     friend std::ostream &operator<<(std::ostream &out, const Partition &P);
