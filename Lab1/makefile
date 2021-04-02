@@ -32,13 +32,13 @@ $(TARGET) : $(OBJS)
 	@mkdir -p $(@D)
 	@echo "Linking" $@ "from" $^ "..."
 	$(LD) -o $@ $^ $(LD_FLAGS) $(LD_LIBS)
-	@echo "Link finished\n"
+	@echo "Link finished"
 
 $(OBJS) : $(OBJ_DIR)/%.o:%.$(TYPE)
 	@mkdir -p $(@D)
 	@echo "Compiling" $@ "from" $< "..."
 	$(CC) -c -o $@ $< $(C_FLAGS) $(INCLUDES)
-	@echo "Compile finished\n"
+	@echo "Compile finished"
 
 .PHONY : clean cleanobj
 clean : cleanobj
@@ -52,21 +52,60 @@ cleanobj :
 simplecase:
 	@make
 	@./bin/lab1 inputs/input_toy.hgr
+	@echo ""
+	@echo "Evaluation"
+	@./utilities/verifier inputs/input_toy.hgr ./output.txt
+	@echo ""
+	@echo "Shmetis Evaluation"
+	@./utilities/shmetis inputs/input_toy.hgr 2 5
+	@./utilities/verifier inputs/input_toy.hgr ./inputs/input_toy.hgr.part.2
+
+
+
 
 case1:
 	@make
 	@./bin/lab1 inputs/input1.txt.hgr
+	@echo ""
+	@echo "Evaluation"
+	@./utilities/verifier inputs/input1.txt.hgr ./output.txt
+	@echo ""
+	@echo "Shmetis Evaluation"
+	@./utilities/shmetis inputs/input1.txt.hgr 2 5
+	@./utilities/verifier inputs/input1.txt.hgr ./inputs/input1.txt.hgr.part.2
+	
 
 case2:
 	@make
 	@./bin/lab1 inputs/input2.txt.hgr
+	@echo ""
+	@echo "Evaluation"
+	@./utilities/verifier inputs/input2.txt.hgr ./output.txt
+	@echo ""
+	@echo "Shmetis Evaluation"
+	@./utilities/shmetis inputs/input2.txt.hgr 2 5
+	@./utilities/verifier inputs/input2.txt.hgr ./inputs/input2.txt.hgr.part.2
 
 case3:
 	@make
 	@./bin/lab1 inputs/input3.txt.hgr
+	@echo ""
+	@echo "Evaluation"
+	@./utilities/verifier inputs/input3.txt.hgr ./output.txt
+	@echo ""
+	@echo "Shmetis Evaluation"
+	@./utilities/shmetis inputs/input3.txt.hgr 2 5
+	@./utilities/verifier inputs/input3.txt.hgr ./inputs/input3.txt.hgr.part.2
 
 largecase:
 	@make
 	@./bin/lab1 inputs/input_very_large.txt.hgr
+	@echo ""
+	@echo "Evaluation"
+	@./utilities/verifier inputs/input_very_large.txt.hgr ./output.txt
+	@echo ""
+	@echo "Shmetis Evaluation"
+	@./utilities/shmetis inputs/input_very_large.txt.hgr 2 5
+	@./utilities/verifier inputs/input_very_large.txt.hgr ./inputs/input_very_large.txt.hgr.part.2
 
 
