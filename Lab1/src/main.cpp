@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     Partition P(&G, 0.46);
 
     // Set FM TLE
-    int FM_TLE =  nodesCount > 100 ? 85 - (timeInput - timestart) / (double)CLOCKS_PER_SEC : 1;
+    int FM_TLE =  nodesCount > 100 ? 85 - (timeInput - timestart) / (double)CLOCKS_PER_SEC : 0.01;
 
     // Iterate FM Algorithm
     int iterateCount = P.iterate(FM_TLE);
