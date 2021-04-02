@@ -109,3 +109,8 @@ largecase:
 	@./utilities/verifier inputs/input_very_large.txt.hgr ./inputs/input_very_large.txt.hgr.part.2
 
 
+zip:
+	@rm -f 0710764.zip
+	@zip -r 0710764.zip src docs/0710764.pdf makefile README.md
+
+
