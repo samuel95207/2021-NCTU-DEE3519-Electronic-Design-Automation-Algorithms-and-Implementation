@@ -6,7 +6,7 @@ INCLUDE_DIR += ./src
 OBJ_DIR = ./src/obj
 
 CC = g++
-C_FLAGS = -g -Wall -std=c++11
+C_FLAGS = -g -Wall -std=c++11 -O3
 LD = $(CC)
 INCLUDES += -I$(INCLUDE_DIR)
 LD_FLAFS += 
@@ -24,7 +24,6 @@ OBJS += ${foreach src, $(notdir $(SRCS)), ${patsubst %.$(TYPE), $(OBJ_DIR)/%.o, 
 vpath %.$(TYPE) $(sort $(dir $(SRCS)))
 
 all : $(TARGET)
-	mkdir -p outputs
 	@echo "Builded target:" $^
 	@echo "Done"
 
@@ -107,5 +106,11 @@ largecase:
 	@echo "Shmetis Evaluation"
 	@./utilities/shmetis inputs/input_very_large.txt.hgr 2 5
 	@./utilities/verifier inputs/input_very_large.txt.hgr ./inputs/input_very_large.txt.hgr.part.2
+
+
+zip:
+	@make clean
+	@rm -f 0710764.zip
+	@zip -r 0710764.zip src docs/0710764.pdf makefile README.md
 
 

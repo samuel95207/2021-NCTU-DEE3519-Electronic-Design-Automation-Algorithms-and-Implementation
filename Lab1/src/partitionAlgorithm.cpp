@@ -244,7 +244,7 @@ void Partition::FM_Algorithm()
     std::cout << "maxGainSum: " << maxGainSum << std::endl;
 }
 
-int Partition::iterate(int TLE)
+int Partition::iterate(int TLE, int maxCount)
 {
     int timeLimit = TLE * (double)CLOCKS_PER_SEC;
     int timeSum = 0;
@@ -252,7 +252,7 @@ int Partition::iterate(int TLE)
     int count = 0;
     while (true)
     {
-        if (timeSum + avgFMTime > timeLimit)
+        if (timeSum + avgFMTime > timeLimit || count >= maxCount)
         {
             break;
         }
