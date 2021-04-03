@@ -108,7 +108,7 @@ Partition::Partition(HyperGraph *graph, double balanceFactor) : graph(graph)
     locklist.resize(graph->nodeCount + 1);
     
     int methodCount = 3;
-    int minMethod = 0;
+    std::vector<bool> minPartition;
     int minCutsize = INT_MAX;
     int cutsize;
 
@@ -116,15 +116,13 @@ Partition::Partition(HyperGraph *graph, double balanceFactor) : graph(graph)
         initialPartition(method);
         cutsize = calculateCutsize();
         if(cutsize < minCutsize){
-            minMethod = method;
+            minPartition = partition;
             minCutsize = cutsize;
         }
     }
 
-    initialPartition(minMethod);
-    cutsize = calculateCutsize();
-
-    std::cout << "Initial cutsize: " << cutsize << '\n';
+    partition = minPartition;
+    std::cout << "Initial cutsize: " << minCutsize << '\n';
 
     leftBucket.setPmax(graph->pinMax);
     rightBucket.setPmax(graph->pinMax);
