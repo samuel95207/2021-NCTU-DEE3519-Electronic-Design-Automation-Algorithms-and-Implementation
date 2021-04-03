@@ -52,7 +52,8 @@ class Partition
 public:
     Partition(HyperGraph *graph, double balanceFactor = 0.5);
 
-    bool initialPartitionLogic(int node);
+    void initialPartition(int method);
+    bool initialPartitionLogic(int node, int method);
 
     void printPartition();
     void printBucket();
@@ -68,8 +69,10 @@ public:
     void reset();
 
     void FM_Algorithm();
-    int iterate(int TLE, int maxCount = INT_MAX);
+    int iterate(int TLE, int maxCount = INT_MAX, int repeatCutsizeThreshold = 10);
     std::pair<int, int> getMaxGainNodeFromBucketlist();
+
+    int calculateCutsize();
 
     friend std::ostream &operator<<(std::ostream &out, const Partition &P);
 };

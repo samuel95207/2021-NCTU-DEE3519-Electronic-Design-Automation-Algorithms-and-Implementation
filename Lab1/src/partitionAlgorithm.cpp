@@ -5,13 +5,46 @@
 
 #include "partition.h"
 
-bool Partition::initialPartitionLogic(int node){
-    // bool logic = rand()%2;
-    bool logic = node > graph->nodeCount/2;
+void Partition::initialPartition(int method)
+{
+    leftCount = 0;
+    rightCount = 0;
+    for (int i = 1; i <= graph->nodeCount; i++)
+    {
+        bool logic = initialPartitionLogic(i, method);
+
+        partition[i] = logic;
+        locklist[i] = false;
+
+        if (logic)
+        {
+            leftCount++;
+        }
+        else
+        {
+            rightCount++;
+        }
+    }
+}
+
+bool Partition::initialPartitionLogic(int node, int method)
+{
+    bool logic;
+    if (method == 0)
+    {
+        logic = node % 2;
+    }
+    else if (method == 1)
+    {
+        logic = rand() % 2;
+    }
+    else if (method == 2)
+    {
+        logic = node > graph->nodeCount / 2;
+    }
 
     return logic;
 }
-
 
 int Partition::gain(int nodeId)
 {
@@ -241,6 +274,7 @@ void Partition::FM_Algorithm()
 
         count++;
     }
+    partition = maxPartition;
 
     // std::cout << "GetMaxGainNodeFromBucketlist time: " << GetMaxGainNodeFromBucketlist_timesum / (double)CLOCKS_PER_SEC << std::endl;
     // std::cout << "ChangeSideAndLock time: " << ChangeSideAndLock_timesum / (double)CLOCKS_PER_SEC << std::endl;
@@ -249,15 +283,17 @@ void Partition::FM_Algorithm()
     // std::cout << "CalculateGain time: " << CalculateGain_timesum / (double)CLOCKS_PER_SEC << std::endl;
     // std::cout << "Total time: " << Total_timesum / (double)CLOCKS_PER_SEC << std::endl;
 
-    std::cout << "maxGainSum: " << maxGainSum << std::endl;
+    // std::cout << "maxGainSum: " << maxGainSum << std::endl;
 }
 
-int Partition::iterate(int TLE, int maxCount)
+int Partition::iterate(int TLE, int maxCount, int repeatCutsizeThreshold)
 {
     int timeLimit = TLE * (double)CLOCKS_PER_SEC;
     int timeSum = 0;
     int avgFMTime = 0;
     int count = 0;
+    int prevCutsize = INT_MAX;
+    int sameCutsizeCount = 0;
     while (true)
     {
         if (timeSum + avgFMTime > timeLimit || count >= maxCount)
@@ -271,6 +307,19 @@ int Partition::iterate(int TLE, int maxCount)
         partition = maxPartition;
         FM_Algorithm();
         reset();
+
+        int cutsize = calculateCutsize();
+        std::cout << "cutsize: " << cutsize << std::endl;
+        if (cutsize == prevCutsize)
+        {
+            sameCutsizeCount++;
+            if (sameCutsizeCount > repeatCutsizeThreshold)
+            {
+                break;
+            }
+        }
+
+        prevCutsize = cutsize;
 
         auto endtime = clock();
 
@@ -354,4 +403,39 @@ std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
             rightMax--;
         }
     }
+}
+
+int Partition::calculateCutsize()
+{
+    auto edges = graph->getEdges();
+    int cutsize = 0;
+    for (auto edgePtr : edges)
+    {
+        bool iscutFlag = false;
+        bool haveLeft = false;
+        bool haveRight = false;
+        auto nodes = *edgePtr->nodes;
+        for (auto node : nodes)
+        {
+            if (partition[node])
+            {
+                haveLeft = true;
+            }
+            else
+            {
+                haveRight = true;
+            }
+            if (haveLeft && haveRight)
+            {
+                iscutFlag = true;
+                break;
+            }
+        }
+
+        if (iscutFlag)
+        {
+            cutsize++;
+        }
+    }
+    return cutsize;
 }

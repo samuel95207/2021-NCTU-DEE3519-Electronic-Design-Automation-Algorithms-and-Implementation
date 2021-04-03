@@ -104,30 +104,27 @@ void Partition::BucketList::print()
 // Partition Member functions
 Partition::Partition(HyperGraph *graph, double balanceFactor) : graph(graph)
 {
-    for (int i = 0; i <= graph->nodeCount; i++)
-    {
-        bool logic = initialPartitionLogic(i);
+    partition.resize(graph->nodeCount + 1);
+    locklist.resize(graph->nodeCount + 1);
+    
+    int methodCount = 3;
+    int minMethod = 0;
+    int minCutsize = INT_MAX;
+    int cutsize;
 
-        partition.push_back(logic);
-        locklist.push_back(false);
+    for(int method = 0;method < methodCount;method++){
+        initialPartition(method);
+        cutsize = calculateCutsize();
+        if(cutsize < minCutsize){
+            minMethod = method;
+            minCutsize = cutsize;
+        }
+    }
 
-        if (logic)
-        {
-            leftCount++;
-        }
-        else
-        {
-            rightCount++;
-        }
-    }
-    if (partition[0])
-    {
-        leftCount--;
-    }
-    else
-    {
-        rightCount--;
-    }
+    initialPartition(minMethod);
+    cutsize = calculateCutsize();
+
+    std::cout << "Initial cutsize: " << cutsize << '\n';
 
     leftBucket.setPmax(graph->pinMax);
     rightBucket.setPmax(graph->pinMax);
@@ -139,7 +136,7 @@ Partition::Partition(HyperGraph *graph, double balanceFactor) : graph(graph)
         std::swap(areaConstrain.first, areaConstrain.second);
     }
 
-    std::cout << "Area Constrain: " << areaConstrain.first << " " << areaConstrain.second << '\n';
+    // std::cout << "Area Constrain: " << areaConstrain.first << " " << areaConstrain.second << '\n';
 
     maxPartition = partition;
 }
@@ -177,7 +174,6 @@ void Partition::printBucket()
 
     std::cout << "\n";
 }
-
 
 std::ostream &operator<<(std::ostream &out, const Partition &P)
 {
