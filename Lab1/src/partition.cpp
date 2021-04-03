@@ -106,13 +106,12 @@ Partition::Partition(HyperGraph *graph, double balanceFactor) : graph(graph)
 {
     for (int i = 0; i <= graph->nodeCount; i++)
     {
-        bool initialPartitionLogic = (rand() % 2);
-        // bool initialPartitionLogic = (i == 1 || i == 3 || i == 4 || i == 7);
+        bool logic = initialPartitionLogic(i);
 
-        partition.push_back(initialPartitionLogic);
+        partition.push_back(logic);
         locklist.push_back(false);
 
-        if (initialPartitionLogic)
+        if (logic)
         {
             leftCount++;
         }

@@ -5,6 +5,14 @@
 
 #include "partition.h"
 
+bool Partition::initialPartitionLogic(int node){
+    // bool logic = rand()%2;
+    bool logic = node > graph->nodeCount/2;
+
+    return logic;
+}
+
+
 int Partition::gain(int nodeId)
 {
     auto edges = graph->getAdjEdges(nodeId);

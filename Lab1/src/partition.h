@@ -52,6 +52,8 @@ class Partition
 public:
     Partition(HyperGraph *graph, double balanceFactor = 0.5);
 
+    bool initialPartitionLogic(int node);
+
     void printPartition();
     void printBucket();
 
