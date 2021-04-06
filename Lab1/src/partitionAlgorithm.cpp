@@ -215,7 +215,11 @@ void Partition::FM_Algorithm()
     {
         // auto timestart = clock();
 
+        // std::cout << "leftCount: " << leftCount << " rightCount: " << rightCount << "\n";
+        // leftBucket.print();
+        // rightBucket.print();
         auto max = getMaxGainNodeFromBucketlist();
+        // std::cout << "choose node: " << max.first << " gain: " << max.second << "\n\n";
 
         // auto timeGetMaxGainNodeFromBucketlist = std::clock();
 
@@ -317,6 +321,8 @@ int Partition::iterate(int TLE, int maxCount, int repeatCutsizeThreshold)
             {
                 break;
             }
+        }else{
+            sameCutsizeCount = 0;
         }
 
         prevCutsize = cutsize;
@@ -347,7 +353,7 @@ std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
             return std::pair<int, int>(-1, 0);
         }
 
-        if (leftMax > rightMax)
+        if (leftMax >= rightMax)
         {
             maxGain = leftMax;
             int maxGainIndex = maxGain + leftBucket.pinMax;
@@ -370,6 +376,8 @@ std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
                 else
                 {
                     changeSide(node);
+                    // std::cout << "left not balanced"
+                    //           << "\n";
                 }
             }
             leftMax--;
@@ -398,6 +406,8 @@ std::pair<int, int> Partition::getMaxGainNodeFromBucketlist()
                 else
                 {
                     changeSide(node);
+                    // std::cout << "right not balanced"
+                    //           << "\n";
                 }
             }
             rightMax--;

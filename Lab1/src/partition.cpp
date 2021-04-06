@@ -91,7 +91,7 @@ void Partition::BucketList::print()
         {
             continue;
         }
-        std::cout << "\t" << (i - pinMax) << " size: " << list.size() << ":\t[ ";
+        std::cout << "\t" << (i - pinMax) << ":\t[ ";
         for (auto node : list)
         {
             std::cout << node << " ";
