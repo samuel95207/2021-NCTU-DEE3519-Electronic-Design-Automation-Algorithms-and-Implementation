@@ -321,6 +321,8 @@ int Partition::iterate(int TLE, int maxCount, int repeatCutsizeThreshold)
             {
                 break;
             }
+        }else{
+            sameCutsizeCount = 0;
         }
 
         prevCutsize = cutsize;
