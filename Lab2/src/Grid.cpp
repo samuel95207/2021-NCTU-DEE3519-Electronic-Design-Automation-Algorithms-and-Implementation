@@ -40,13 +40,24 @@ void Grid::addBlock(int leftDownX, int leftDownY, int rightUpX, int rightUpY)
 
 std::ostream &operator<<(std::ostream &out, const Grid &G)
 {
+    for (int i = 0; i < G.width + 1; i++)
+    {
+        out << "---";
+    }
+    out << endl;
     for (int y = G.height - 1; y >= 0; y--)
     {
+        out << "|";
         for (int x = 0; x < G.width; x++)
         {
-            out << G.gridbox[y][x].isObstacle();
+            out << (G.gridbox[y][x].isObstacle() ? " X " : "   ");
         }
-        out << "\n";
+        out << "|\n";
     }
+    for (int i = 0; i < G.width + 1; i++)
+    {
+        out << "---";
+    }
+    out << endl;
     return out;
 }
