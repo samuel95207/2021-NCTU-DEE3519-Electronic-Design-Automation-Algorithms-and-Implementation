@@ -8,12 +8,17 @@ Router::Router()
     grid = new Grid();
 }
 
+void Router::addNet(string name, int srcX, int srcY, int dstX, int dstY)
+{
+    nets.push_back(new Net(name, srcX, srcY, dstX, dstY));
+}
+
 std::istream &operator>>(std::istream &in, Router &R)
 {
     string line;
     istringstream iss;
 
-    int col, row, blockNum;
+    int col, row, blockNum, netNum;
 
     while (getline(in, line))
     {
@@ -49,6 +54,19 @@ std::istream &operator>>(std::istream &in, Router &R)
         }
         else if (selection == ".net")
         {
+            iss >> netNum;
+            for (int i = 0; i < netNum; i++)
+            {
+                getline(in, line);
+
+                iss.clear();
+                iss.str(line);
+
+                string name;
+                int srcX, srcY, dstX, dstY;
+                iss >> name >> srcX >> srcY >> dstX >> dstY;
+                R.addNet(name, srcX, srcY, dstX, dstY);
+            }
         }
     }
 
@@ -58,5 +76,9 @@ std::istream &operator>>(std::istream &in, Router &R)
 std::ostream &operator<<(std::ostream &out, const Router R)
 {
     out << *(R.grid);
+    for (auto netPtr : R.nets)
+    {
+        out << *netPtr;
+    }
     return out;
 }

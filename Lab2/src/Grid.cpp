@@ -38,10 +38,8 @@ void Grid::addBlock(int leftDownX, int leftDownY, int rightUpX, int rightUpY)
     }
 }
 
-std::ostream &operator<<(std::ostream &out, const Grid G)
+std::ostream &operator<<(std::ostream &out, const Grid &G)
 {
-    cout << "out" << endl;
-    cout << G.height << " " << G.width << endl;
     for (int y = G.height - 1; y >= 0; y--)
     {
         for (int x = 0; x < G.width; x++)

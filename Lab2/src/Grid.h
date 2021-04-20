@@ -19,7 +19,7 @@ public:
     void setSize(int height, int width);
     void addBlock(int leftDownX, int leftDownY, int rightUpX, int rightUpY);
 
-    friend std::ostream &operator<<(std::ostream &out, const Grid G);
+    friend std::ostream &operator<<(std::ostream &out, const Grid &G);
 };
 
 struct Grid::GridBox
