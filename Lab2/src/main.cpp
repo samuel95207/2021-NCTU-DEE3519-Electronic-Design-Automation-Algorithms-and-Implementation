@@ -5,19 +5,18 @@
 #include <set>
 #include <ctime>
 
-#include "Grid.h"
+#include "Router.h"
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
-
-    Grid G;
+    Router R;
 
     // Input
     ifstream infile(argv[1]);
 
-    infile>>G;
-    cout<<G;
+    infile>>R;
+    cout<<R;
 
 }
