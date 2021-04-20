@@ -7,12 +7,11 @@ using namespace std;
 
 class Router
 {
-    Grid* grid;
+    Grid *grid;
 
-    public:
+public:
     Router();
-    Router(Grid* G): grid(G){};
-
+    Router(Grid *G) : grid(G){};
 
     friend std::istream &operator>>(std::istream &in, Router &R);
     friend std::ostream &operator<<(std::ostream &out, const Router R);

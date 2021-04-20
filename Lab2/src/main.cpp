@@ -16,7 +16,6 @@ int main(int argc, char **argv)
     // Input
     ifstream infile(argv[1]);
 
-    infile>>R;
-    cout<<R;
-
+    infile >> R;
+    cout << R;
 }
