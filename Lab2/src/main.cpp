@@ -18,4 +18,6 @@ int main(int argc, char **argv)
 
     infile >> R;
     cout << R;
+
+    R.start();
 }

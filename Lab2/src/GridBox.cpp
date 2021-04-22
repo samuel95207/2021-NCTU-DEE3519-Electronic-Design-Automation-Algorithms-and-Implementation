@@ -17,7 +17,26 @@ void Grid::GridBox::setObstacle()
     obstacle = true;
 }
 
+void Grid::GridBox::clearObstacle(){
+    obstacle = false;
+}
+
+void Grid::GridBox::setPath(){
+    obstacle = true;
+    path = true;
+}
+
 bool Grid::GridBox::isObstacle() const
 {
     return obstacle;
+}
+
+string Grid::GridBox::toString() const
+{
+    if(path){
+        return ".";
+    }else if(obstacle){
+        return "X";
+    }
+    return " ";
 }

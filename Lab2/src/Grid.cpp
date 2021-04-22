@@ -15,7 +15,7 @@ void Grid::setSize(int height_in, int width_in)
 {
     height = height_in;
     width = width_in;
-    gridbox.clear();
+    gridboxes.clear();
     for (int y = 0; y < height; y++)
     {
         vector<GridBox> row;
@@ -23,7 +23,7 @@ void Grid::setSize(int height_in, int width_in)
         {
             row.push_back(GridBox(x, y, false));
         }
-        gridbox.push_back(row);
+        gridboxes.push_back(row);
     }
 }
 
@@ -33,9 +33,17 @@ void Grid::addBlock(int leftDownX, int leftDownY, int rightUpX, int rightUpY)
     {
         for (int x = leftDownX; x <= rightUpX; x++)
         {
-            gridbox[y][x].setObstacle();
+            gridboxes[y][x].setObstacle();
         }
     }
+}
+ 
+void Grid::setObstacle(int x, int y){
+    gridboxes[y][x].setObstacle();
+}
+
+void Grid::setPath(int x, int y){
+    gridboxes[y][x].setPath();
 }
 
 std::ostream &operator<<(std::ostream &out, const Grid &G)
@@ -50,7 +58,7 @@ std::ostream &operator<<(std::ostream &out, const Grid &G)
         out << "|";
         for (int x = 0; x < G.width; x++)
         {
-            out << (G.gridbox[y][x].isObstacle() ? " X " : "   ");
+            out << " " << G.gridboxes[y][x].toString() <<" ";
         }
         out << "|\n";
     }

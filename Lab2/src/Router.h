@@ -14,11 +14,16 @@ class Router
     Grid *grid;
     vector<Net *> nets;
 
+
 public:
     Router();
     Router(Grid *G) : grid(G){};
 
+    void start();
+
     void addNet(string name, int srcX, int srcY, int dstX, int dstY);
+
+    void astarRouting(Net * net);
 
     friend std::istream &operator>>(std::istream &in, Router &R);
     friend std::ostream &operator<<(std::ostream &out, const Router R);
