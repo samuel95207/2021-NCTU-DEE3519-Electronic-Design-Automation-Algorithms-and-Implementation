@@ -116,6 +116,7 @@ std::ostream &operator<<(std::ostream &out, const Grid &G)
         out << "---";
     }
     out << endl;
+
     for (int y = G.height - 1; y >= 0; y--)
     {
         out << "|";
@@ -123,11 +124,19 @@ std::ostream &operator<<(std::ostream &out, const Grid &G)
         {
             out << " " << G.gridboxes[y][x].toString() << " ";
         }
-        out << "|\n";
+        out << "|" << y << "\n";
     }
     for (int i = 0; i < G.width + 1; i++)
     {
         out << "---";
+    }
+    out << "\n ";
+    for (int i = 0; i < G.width; i++)
+    {
+        out << " " << i;
+        if(i < 10){
+            out<<" ";
+        }
     }
     out << endl;
     return out;
