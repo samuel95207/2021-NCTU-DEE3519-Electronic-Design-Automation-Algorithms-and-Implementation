@@ -45,7 +45,9 @@ public:
 struct Grid::GridBox
 {
     bool obstacle = false;
-    bool path = false;
+    bool isPath = false;
+
+    vector<GridBox * > path;
 
     pair<int, int> pos;
     int cost = INT_MAX;

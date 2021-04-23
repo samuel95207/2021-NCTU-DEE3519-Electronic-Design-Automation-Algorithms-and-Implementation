@@ -48,8 +48,10 @@ void Router::astarRouting(Net *net)
     priority_queue<Grid::GridBox *, std::vector<Grid::GridBox *>, decltype(cmp)> priorityQueue(cmp);
 
     // Push the src into priority queue
-    grid->getGridbox(net->src)->cost = 0;
-    priorityQueue.push(grid->getGridbox(net->src));
+    auto srcGridbox = grid->getGridbox(net->src);
+    srcGridbox->cost = 0;
+    srcGridbox->path.push_back(srcGridbox);
+    priorityQueue.push(srcGridbox);
 
     // Set dst terminal to not obstacle
     grid->getGridbox(net->dst)->clearObstacle();
@@ -63,7 +65,12 @@ void Router::astarRouting(Net *net)
         if (gridbox->getPos() == net->dst)
         {
             cout << "Find path\n";
-            cout<<*grid;
+            for (auto box : gridbox->path)
+            {
+                box->setPath();
+                net->path.push_back(box->pos);
+            }
+            cout << *grid;
             return;
         }
 
@@ -83,13 +90,18 @@ void Router::astarRouting(Net *net)
             if (reachGridbox == nullptr || adjGridbox->cost < reachGridbox->cost)
             {
                 adjGridbox->cost = gridbox->cost + 1;
+                adjGridbox->path = gridbox->path;
+                adjGridbox->path.push_back(adjGridbox);
+
                 reachedGridboxes[id] = adjGridbox;
                 priorityQueue.push(adjGridbox);
             }
 
-            cout << *adjGridbox << endl;
+            // cout << *adjGridbox << endl;
         }
     }
+
+    cout << "Cannot find path\n";
 }
 
 std::istream &operator>>(std::istream &in, Router &R)

@@ -23,7 +23,7 @@ void Grid::GridBox::clearObstacle(){
 
 void Grid::GridBox::setPath(){
     obstacle = true;
-    path = true;
+    isPath = true;
 }
 
 bool Grid::GridBox::isObstacle() const
@@ -37,7 +37,7 @@ pair<int, int> Grid::GridBox::getPos(){
 
 string Grid::GridBox::toString() const
 {
-    if(path){
+    if(isPath){
         return ".";
     }else if(obstacle){
         return "X";
