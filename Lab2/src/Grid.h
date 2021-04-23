@@ -47,6 +47,8 @@ struct Grid::GridBox
     bool obstacle = false;
     bool isPath = false;
 
+    string symbol = "";
+
     vector<GridBox *> path;
 
     pair<int, int> pos;
@@ -58,6 +60,9 @@ struct Grid::GridBox
     void setObstacle();
     void clearObstacle();
     void setPath();
+    void setSymbol(string str);
+    void setSymbol(char c);
+
 
     bool isObstacle() const;
     pair<int, int> getPos();

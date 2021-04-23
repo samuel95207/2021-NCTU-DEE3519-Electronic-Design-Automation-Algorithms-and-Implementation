@@ -78,6 +78,7 @@ void Router::astarRouting(Net *net)
             for (auto box : gridbox->path)
             {
                 box->setPath();
+                box->setSymbol(net->name[3]);
                 net->path.push_back(box->pos);
             }
             cout << net->outputFormat();

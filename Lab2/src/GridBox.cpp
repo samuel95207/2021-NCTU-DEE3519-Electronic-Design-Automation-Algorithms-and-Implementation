@@ -28,6 +28,17 @@ void Grid::GridBox::setPath()
     isPath = true;
 }
 
+void Grid::GridBox::setSymbol(string str){
+    symbol = str;
+}
+
+void Grid::GridBox::setSymbol(char c){
+    string str = "";
+    str += c;
+    symbol = str;
+}
+
+
 bool Grid::GridBox::isObstacle() const
 {
     return obstacle;
@@ -42,7 +53,11 @@ string Grid::GridBox::toString() const
 {
     if (isPath)
     {
-        return ".";
+        if(symbol == ""){
+            return ".";
+        }else{
+            return symbol;
+        }
     }
     else if (obstacle)
     {
