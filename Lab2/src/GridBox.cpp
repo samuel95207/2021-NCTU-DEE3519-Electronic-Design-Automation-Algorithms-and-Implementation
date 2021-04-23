@@ -17,11 +17,13 @@ void Grid::GridBox::setObstacle()
     obstacle = true;
 }
 
-void Grid::GridBox::clearObstacle(){
+void Grid::GridBox::clearObstacle()
+{
     obstacle = false;
 }
 
-void Grid::GridBox::setPath(){
+void Grid::GridBox::setPath()
+{
     obstacle = true;
     isPath = true;
 }
@@ -31,15 +33,19 @@ bool Grid::GridBox::isObstacle() const
     return obstacle;
 }
 
-pair<int, int> Grid::GridBox::getPos(){
+pair<int, int> Grid::GridBox::getPos()
+{
     return pos;
 }
 
 string Grid::GridBox::toString() const
 {
-    if(isPath){
+    if (isPath)
+    {
         return ".";
-    }else if(obstacle){
+    }
+    else if (obstacle)
+    {
         return "X";
     }
     return " ";

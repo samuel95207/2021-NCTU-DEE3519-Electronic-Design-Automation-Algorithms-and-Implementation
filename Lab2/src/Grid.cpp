@@ -97,10 +97,10 @@ int Grid::posToId(int x, int y)
     return width * y + x;
 }
 
-int Grid::posToId(pair<int, int> pos){
+int Grid::posToId(pair<int, int> pos)
+{
     return posToId(pos.first, pos.second);
 }
-
 
 pair<int, int> Grid::idToPos(int id)
 {

@@ -5,6 +5,7 @@
 #include <queue>
 #include <functional>
 #include <vector>
+#include <algorithm>
 
 #include "Router.h"
 
@@ -15,7 +16,11 @@ Router::Router()
 
 void Router::start()
 {
-    astarRouting(nets[0]);
+    sortNets();
+    for (auto net : nets)
+    {
+        astarRouting(net);
+    }
 }
 
 void Router::addNet(string name, int srcX, int srcY, int dstX, int dstY)
@@ -23,6 +28,11 @@ void Router::addNet(string name, int srcX, int srcY, int dstX, int dstY)
     nets.push_back(new Net(name, srcX, srcY, dstX, dstY));
     grid->setPath(srcX, srcY);
     grid->setPath(dstX, dstY);
+}
+
+void Router::sortNets()
+{
+    std::sort(nets.begin(), nets.end(), [](Router::Net *a, Router::Net *b) { return a->area < b->area; });
 }
 
 void Router::astarRouting(Net *net)
@@ -70,6 +80,7 @@ void Router::astarRouting(Net *net)
                 box->setPath();
                 net->path.push_back(box->pos);
             }
+            cout << net->outputFormat();
             cout << *grid;
             return;
         }
@@ -166,10 +177,9 @@ std::istream &operator>>(std::istream &in, Router &R)
 
 std::ostream &operator<<(std::ostream &out, const Router R)
 {
-    out << *(R.grid);
     for (auto netPtr : R.nets)
     {
-        out << *netPtr;
+        out << netPtr->outputFormat();
     }
     return out;
 }

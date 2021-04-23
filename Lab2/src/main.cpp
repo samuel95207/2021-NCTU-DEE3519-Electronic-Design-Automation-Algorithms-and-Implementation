@@ -15,9 +15,14 @@ int main(int argc, char **argv)
 
     // Input
     ifstream infile(argv[1]);
-
     infile >> R;
-    cout << R;
+    infile.close();
 
     R.start();
+
+    // Output
+    ofstream outfile(argv[2]);
+    outfile << R;
+    cout << R;
+    outfile.close();
 }

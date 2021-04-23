@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <algorithm>
 
 #include "Grid.h"
 
@@ -14,7 +15,6 @@ class Router
     Grid *grid;
     vector<Net *> nets;
 
-
 public:
     Router();
     Router(Grid *G) : grid(G){};
@@ -23,7 +23,9 @@ public:
 
     void addNet(string name, int srcX, int srcY, int dstX, int dstY);
 
-    void astarRouting(Net * net);
+    void sortNets();
+
+    void astarRouting(Net *net);
 
     friend std::istream &operator>>(std::istream &in, Router &R);
     friend std::ostream &operator<<(std::ostream &out, const Router R);
@@ -41,6 +43,8 @@ struct Router::Net
 
     Net(string name, int srcX, int srcY, int dstX, int dstY);
     int calculateArea();
+
+    string outputFormat();
 
     friend std::ostream &operator<<(std::ostream &out, const Router::Net &N)
     {
