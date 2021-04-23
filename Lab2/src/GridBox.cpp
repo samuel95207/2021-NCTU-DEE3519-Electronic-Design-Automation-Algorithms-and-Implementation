@@ -31,6 +31,10 @@ bool Grid::GridBox::isObstacle() const
     return obstacle;
 }
 
+pair<int, int> Grid::GridBox::getPos(){
+    return pos;
+}
+
 string Grid::GridBox::toString() const
 {
     if(path){

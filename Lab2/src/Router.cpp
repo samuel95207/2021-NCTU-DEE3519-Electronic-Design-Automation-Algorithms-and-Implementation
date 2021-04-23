@@ -27,6 +27,7 @@ void Router::addNet(string name, int srcX, int srcY, int dstX, int dstY)
 
 void Router::astarRouting(Net *net)
 {
+    // heuristic function
     auto heuristic = [&](Grid::GridBox *gridbox) {
         int x1, y1, x2, y2;
         x1 = gridbox->pos.first;
@@ -37,30 +38,58 @@ void Router::astarRouting(Net *net)
         return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     };
 
-    unordered_map<int, Grid::GridBox> reachedGrids;
+    // reach list
+    unordered_map<int, Grid::GridBox *> reachedGridboxes;
+
+    // priorityQueue
     auto cmp = [&](Grid::GridBox *a, Grid::GridBox *b) {
         return ((double(a->cost) + heuristic(a)) > (double(b->cost) + heuristic(b)));
     };
     priority_queue<Grid::GridBox *, std::vector<Grid::GridBox *>, decltype(cmp)> priorityQueue(cmp);
 
-    grid->gridboxes[7][4].cost = 0;
-    grid->gridboxes[8][4].cost = 0;
-    grid->gridboxes[9][4].cost = 0;
-    grid->gridboxes[10][4].cost = 0;
+    // Push the src into priority queue
+    grid->getGridbox(net->src)->cost = 0;
+    priorityQueue.push(grid->getGridbox(net->src));
 
-    priorityQueue.push(&(grid->gridboxes[9][4]));
-    priorityQueue.push(&(grid->gridboxes[7][4]));
-    priorityQueue.push(&(grid->gridboxes[10][4]));
-    priorityQueue.push(&(grid->gridboxes[8][4]));
+    // Set dst terminal to not obstacle
+    grid->getGridbox(net->dst)->clearObstacle();
 
-    cout << *priorityQueue.top() << endl;
-    priorityQueue.pop();
-    cout << *priorityQueue.top() << endl;
-    priorityQueue.pop();
-    cout << *priorityQueue.top() << endl;
-    priorityQueue.pop();
-    cout << *priorityQueue.top() << endl;
-    priorityQueue.pop();
+    // start iteration
+    while (priorityQueue.size() != 0)
+    {
+        auto gridbox = priorityQueue.top();
+        priorityQueue.pop();
+
+        if (gridbox->getPos() == net->dst)
+        {
+            cout << "Find path\n";
+            cout<<*grid;
+            return;
+        }
+
+        auto adjGridboxes = grid->getAdjGridboxes(gridbox);
+        for (auto adjGridbox : adjGridboxes)
+        {
+
+            // check wether reached before
+            int id = grid->posToId(adjGridbox->getPos());
+            Grid::GridBox *reachGridbox = nullptr;
+            auto findIter = reachedGridboxes.find(id);
+            if (findIter != reachedGridboxes.end())
+            {
+                reachGridbox = findIter->second;
+            }
+
+            if (reachGridbox == nullptr || adjGridbox->cost < reachGridbox->cost)
+            {
+                adjGridbox->cost = gridbox->cost + 1;
+                reachedGridboxes[id] = adjGridbox;
+                priorityQueue.push(adjGridbox);
+            }
+
+            cout << *adjGridbox << endl;
+        }
+    }
 }
 
 std::istream &operator>>(std::istream &in, Router &R)

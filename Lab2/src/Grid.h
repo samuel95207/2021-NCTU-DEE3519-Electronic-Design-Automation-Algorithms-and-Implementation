@@ -17,11 +17,26 @@ public:
     Grid(){};
     Grid(int height, int width);
 
+    // Setters
     void setSize(int height, int width);
     void addBlock(int leftDownX, int leftDownY, int rightUpX, int rightUpY);
     void setObstacle(int x, int y);
     void setPath(int x, int y);
 
+    // Getters
+    GridBox *getGridbox(int x, int y);
+    GridBox *getGridbox(pair<int, int>);
+    vector<GridBox *> getAdjGridboxes(GridBox *gridbox);
+
+    // Checker
+    bool isInBound(pair<int, int> pos);
+
+    // Utils
+    int posToId(int x, int y);
+    int posToId(pair<int, int> pos);
+    pair<int, int> idToPos(int id);
+
+    // IO
     friend std::ostream &operator<<(std::ostream &out, const Grid &G);
 
     friend class Router;
@@ -41,13 +56,14 @@ struct Grid::GridBox
     void setObstacle();
     void clearObstacle();
     void setPath();
-    
+
     bool isObstacle() const;
+    pair<int, int> getPos();
     string toString() const;
 
     friend std::ostream &operator<<(std::ostream &out, const GridBox &G)
     {
-        out << "pos: (" << G.pos.first << ", " << G.pos.second << ")  cost:" << G.cost << endl;
+        out << "pos: (" << G.pos.first << ", " << G.pos.second << ")  cost:" << G.cost;
         return out;
     }
 };

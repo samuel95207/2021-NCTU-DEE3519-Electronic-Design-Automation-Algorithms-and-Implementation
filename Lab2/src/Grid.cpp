@@ -37,13 +37,76 @@ void Grid::addBlock(int leftDownX, int leftDownY, int rightUpX, int rightUpY)
         }
     }
 }
- 
-void Grid::setObstacle(int x, int y){
+
+void Grid::setObstacle(int x, int y)
+{
     gridboxes[y][x].setObstacle();
 }
 
-void Grid::setPath(int x, int y){
+void Grid::setPath(int x, int y)
+{
     gridboxes[y][x].setPath();
+}
+
+Grid::GridBox *Grid::getGridbox(int x, int y)
+{
+    return &gridboxes[y][x];
+}
+
+Grid::GridBox *Grid::getGridbox(pair<int, int> pos)
+{
+    return &gridboxes[pos.second][pos.first];
+}
+
+vector<Grid::GridBox *> Grid::getAdjGridboxes(Grid::GridBox *gridbox)
+{
+    auto pos = gridbox->getPos();
+    int x = pos.first;
+    int y = pos.second;
+
+    vector<pair<int, int>> adjPosList;
+    adjPosList.push_back(pair<int, int>(x + 1, y));
+    adjPosList.push_back(pair<int, int>(x - 1, y));
+    adjPosList.push_back(pair<int, int>(x, y + 1));
+    adjPosList.push_back(pair<int, int>(x, y - 1));
+
+    vector<Grid::GridBox *> adjList;
+
+    for (auto adjPos : adjPosList)
+    {
+        if (!isInBound(adjPos))
+        {
+            continue;
+        }
+        auto gridbox = getGridbox(adjPos);
+        if (!gridbox->isObstacle())
+        {
+            adjList.push_back(gridbox);
+        }
+    }
+    return adjList;
+}
+
+bool Grid::isInBound(pair<int, int> pos)
+{
+    return pos.first >= 0 && pos.first < width && pos.second >= 0 && pos.second < height;
+}
+
+int Grid::posToId(int x, int y)
+{
+    return width * y + x;
+}
+
+int Grid::posToId(pair<int, int> pos){
+    return posToId(pos.first, pos.second);
+}
+
+
+pair<int, int> Grid::idToPos(int id)
+{
+    int y = id / width;
+    int x = id % width;
+    return pair<int, int>(x, y);
 }
 
 std::ostream &operator<<(std::ostream &out, const Grid &G)
@@ -58,7 +121,7 @@ std::ostream &operator<<(std::ostream &out, const Grid &G)
         out << "|";
         for (int x = 0; x < G.width; x++)
         {
-            out << " " << G.gridboxes[y][x].toString() <<" ";
+            out << " " << G.gridboxes[y][x].toString() << " ";
         }
         out << "|\n";
     }
