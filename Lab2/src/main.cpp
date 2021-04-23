@@ -23,6 +23,7 @@ int main(int argc, char **argv)
     // Output
     ofstream outfile(argv[2]);
     outfile << R;
-    cout << R;
+    cout << "\nOutput:\n"
+         << R;
     outfile.close();
 }
