@@ -43,7 +43,7 @@ $(OBJS) : $(OBJ_DIR)/%.o:%.$(TYPE)
 clean : cleanobj
 	@echo "Remove all executable files and output files"
 	rm -f $(TARGET)
-	rm -f ./outputs/*
+	rm -f ./outputs/*/*
 cleanobj :
 	@echo "Remove object files"
 	rm -rf $(OBJ_DIR)/*.o
