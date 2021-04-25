@@ -50,7 +50,7 @@ void Router::astarRouting(Net *net)
         x2 = net->dst.first;
         y2 = net->dst.second;
 
-        return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+        return abs(x1 - x2) + abs(y1 - y2);
     };
 
     // reach list
