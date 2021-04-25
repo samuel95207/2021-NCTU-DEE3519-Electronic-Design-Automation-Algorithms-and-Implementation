@@ -52,7 +52,6 @@ cleanobj :
 case1:
 	@make
 	@./bin/0710764_lab2.o ./inputs/case1/case1.in ./outputs/case1/case1.out
-	
 
 case2:
 	@make
