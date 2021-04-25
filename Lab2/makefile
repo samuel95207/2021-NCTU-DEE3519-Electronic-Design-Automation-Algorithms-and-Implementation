@@ -51,15 +51,15 @@ cleanobj :
 
 case1:
 	@make
-	@./bin/0710764_lab2.o ./inputs/case1/case1.in ./outputs/case1/case1.out
+	@./bin/0710764_lab2.o ./inputs/case1/case1.in ./outputs/case1.out
 
 case2:
 	@make
-	@./bin/0710764_lab2.o ./inputs/case2/case2.in ./outputs/case2/case2.out
+	@./bin/0710764_lab2.o ./inputs/case2/case2.in ./outputs/case2.out
 
 case3:
 	@make
-	@./bin/0710764_lab2.o ./inputs/case3/case3.in ./outputs/case3/case3.out
+	@./bin/0710764_lab2.o ./inputs/case3/case3.in ./outputs/case3.out
 
 
 zip:
