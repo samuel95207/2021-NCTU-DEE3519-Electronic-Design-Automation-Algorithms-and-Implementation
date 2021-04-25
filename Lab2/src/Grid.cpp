@@ -111,6 +111,9 @@ pair<int, int> Grid::idToPos(int id)
 
 std::ostream &operator<<(std::ostream &out, const Grid &G)
 {
+    if(G.width > 50 || G.height > 50){
+        return out;
+    }
     for (int i = 0; i < G.width + 1; i++)
     {
         out << "---";
