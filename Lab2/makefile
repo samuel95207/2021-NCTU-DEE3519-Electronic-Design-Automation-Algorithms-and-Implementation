@@ -64,7 +64,9 @@ case3:
 
 zip:
 	@make clean
+	@make
+	@rm -rf ./src/obj/*
 	@rm -f 0710764.zip
-	@zip -r 0710764.zip src docs/0710764.pdf makefile README.md
+	@zip -r 0710764.zip src makefile bin/0710764_lab2.o README.md
 
 
