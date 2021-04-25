@@ -37,12 +37,14 @@ struct Router::Net
     pair<int, int> src;
     pair<int, int> dst;
     int area;
+    int pinNum;
 
     bool isRouted;
     vector<pair<int, int>> path;
 
     Net(string name, int srcX, int srcY, int dstX, int dstY);
     int calculateArea();
+    int calculatePinNum(vector<Net *> nets);
 
     string outputFormat();
 
@@ -52,6 +54,7 @@ struct Router::Net
         out << "src: (" << N.src.first << " " << N.src.second << ")\n";
         out << "dst: (" << N.dst.first << " " << N.dst.second << ")\n";
         out << "area: " << N.area << endl;
+        out << "pinNum: " << N.pinNum << endl;
         return out;
     }
 };

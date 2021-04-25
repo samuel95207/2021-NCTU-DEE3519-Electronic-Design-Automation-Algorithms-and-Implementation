@@ -11,7 +11,7 @@ class Grid
     int height;
     int width;
 
-    vector<vector<GridBox>> gridboxes;
+    GridBox** gridboxes;
 
 public:
     Grid(){};

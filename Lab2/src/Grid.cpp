@@ -15,15 +15,15 @@ void Grid::setSize(int height_in, int width_in)
 {
     height = height_in;
     width = width_in;
-    gridboxes.clear();
+    gridboxes = new GridBox*[height];
     for (int y = 0; y < height; y++)
     {
-        vector<GridBox> row;
+        auto row = new GridBox[width];
         for (int x = 0; x < width; x++)
         {
-            row.push_back(GridBox(x, y, false));
+            row[x] = GridBox(x, y, false);
         }
-        gridboxes.push_back(row);
+        gridboxes[y] = row;
     }
 }
 

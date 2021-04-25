@@ -32,7 +32,12 @@ void Router::addNet(string name, int srcX, int srcY, int dstX, int dstY)
 
 void Router::sortNets()
 {
-    std::sort(nets.begin(), nets.end(), [](Router::Net *a, Router::Net *b) { return a->area < b->area; });
+    for (auto net : nets)
+    {
+        net->calculatePinNum(nets);
+        cout << *net << endl;
+    }
+    std::sort(nets.begin(), nets.end(), [](Router::Net *a, Router::Net *b) { return a->pinNum < b->pinNum; });
 }
 
 void Router::astarRouting(Net *net)
