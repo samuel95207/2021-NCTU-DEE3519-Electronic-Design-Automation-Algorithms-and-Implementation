@@ -86,10 +86,7 @@ void Router::astarRouting(Net *net)
                 box->setSymbol(net->name[3]);
                 net->path.push_back(box->pos);
             }
-            if (grid->width < 20 && grid->height < 20)
-            {
-                cout << *grid;
-            }
+            cout << *grid;
             return;
         }
 
