@@ -23,9 +23,12 @@ public:
 
     void addNet(string name, int srcX, int srcY, int dstX, int dstY);
 
+    void buildNet(Net *net, std::vector<Grid::GridBox *> &path);
+    void demolishNet(Net *net);
+
     void sortNets();
 
-    void astarRouting(Net *net);
+    pair<bool, Grid::GridBox *> astarRouting(Net *net);
 
     friend std::istream &operator>>(std::istream &in, Router &R);
     friend std::ostream &operator<<(std::ostream &out, const Router R);

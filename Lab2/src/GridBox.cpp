@@ -29,14 +29,10 @@ void Grid::GridBox::setPath(int netId_in)
     netId = netId_in;
 }
 
-void Grid::GridBox::setSymbol(string str){
-    symbol = str;
-}
-
-void Grid::GridBox::setSymbol(char c){
-    string str = "";
-    str += c;
-    symbol = str;
+void Grid::GridBox::clearPath(){
+    obstacle = false;
+    isPath = false;
+    netId = -1;
 }
 
 

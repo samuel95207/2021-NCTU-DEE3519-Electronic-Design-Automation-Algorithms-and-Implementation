@@ -17,9 +17,35 @@ Router::Router()
 void Router::start()
 {
     sortNets();
+
+    auto cmp = [&](Net *a, Net *b) {
+        return (a->pinNum > b->pinNum);
+    };
+    priority_queue<Net *, std::vector<Net *>, decltype(cmp)> priorityQueue(cmp);
     for (auto net : nets)
     {
-        astarRouting(net);
+        priorityQueue.push(net);
+    }
+
+    while (!priorityQueue.empty())
+    {
+        auto net = priorityQueue.top();
+        priorityQueue.pop();
+
+        while (true)
+        {
+            auto result = astarRouting(net);
+            if (result.first)
+            {
+                break;
+            }
+
+            cout << "Stuck at (" << result.second->pos.first << ", " << result.second->pos.second << ")" << endl;
+            int id = grid->nearestNet(result.second->pos);
+            auto demolishnet = nets[id];
+            demolishNet(demolishnet);
+            priorityQueue.push(demolishnet);
+        }
     }
 }
 
@@ -27,8 +53,33 @@ void Router::addNet(string name, int srcX, int srcY, int dstX, int dstY)
 {
     auto net = new Net(name, nets.size(), srcX, srcY, dstX, dstY);
     nets.push_back(net);
-    grid->setPath(srcX, srcY, net->id);
-    grid->setPath(dstX, dstY, net->id);
+    grid->setObstacle(srcX, srcY);
+    grid->setObstacle(dstX, dstY);
+}
+
+void Router::buildNet(Net *net, std::vector<Grid::GridBox *> &path)
+{
+    for (auto box : path)
+    {
+        box->setPath(net->id);
+        net->path.push_back(box->pos);
+    }
+    net->isRouted = true;
+    cout << "Build net " << net->name << endl;
+}
+
+void Router::demolishNet(Net *net)
+{
+    for (auto pos : net->path)
+    {
+        grid->getGridbox(pos)->clearPath();
+    }
+    grid->getGridbox(net->src)->setPath(net->id);
+    grid->getGridbox(net->dst)->setPath(net->id);
+
+    net->path.clear();
+    net->isRouted = false;
+    cout << "Demolish net " << net->name << endl;
 }
 
 void Router::sortNets()
@@ -38,11 +89,12 @@ void Router::sortNets()
         net->calculatePinNum(nets);
         cout << *net << endl;
     }
-    std::sort(nets.begin(), nets.end(), [](Router::Net *a, Router::Net *b) { return a->pinNum < b->pinNum; });
+    // std::sort(nets.begin(), nets.end(), [](Router::Net *a, Router::Net *b) { return a->pinNum < b->pinNum; });
 }
 
-void Router::astarRouting(Net *net)
+pair<bool, Grid::GridBox *> Router::astarRouting(Net *net)
 {
+    Grid::GridBox *nearestGridbox = nullptr;
     // heuristic function
     auto heuristic = [&](Grid::GridBox *gridbox) {
         int x1, y1, x2, y2;
@@ -72,6 +124,8 @@ void Router::astarRouting(Net *net)
     // Set dst terminal to not obstacle
     grid->getGridbox(net->dst)->clearObstacle();
 
+    int minDistance = INT_MAX;
+
     // start iteration
     while (priorityQueue.size() != 0)
     {
@@ -81,14 +135,14 @@ void Router::astarRouting(Net *net)
         if (gridbox->getPos() == net->dst)
         {
             cout << "Find path\n";
-            for (auto box : gridbox->path)
-            {
-                box->setPath(net->id);
-                box->setSymbol(net->name[3]);
-                net->path.push_back(box->pos);
-            }
+            buildNet(net, gridbox->path);
             cout << *grid;
-            return;
+            return pair<bool, Grid::GridBox *>(true, nearestGridbox);
+        }
+
+        if (heuristic(gridbox) < minDistance)
+        {
+            nearestGridbox = gridbox;
         }
 
         auto adjGridboxes = grid->getAdjGridboxes(gridbox);
@@ -119,6 +173,7 @@ void Router::astarRouting(Net *net)
     }
 
     cout << "Cannot find path\n";
+    return pair<bool, Grid::GridBox *>(false, nearestGridbox);
 }
 
 std::istream &operator>>(std::istream &in, Router &R)

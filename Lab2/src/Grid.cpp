@@ -15,7 +15,7 @@ void Grid::setSize(int height_in, int width_in)
 {
     height = height_in;
     width = width_in;
-    gridboxes = new GridBox*[height];
+    gridboxes = new GridBox *[height];
     for (int y = 0; y < height; y++)
     {
         auto row = new GridBox[width];
@@ -109,9 +109,86 @@ pair<int, int> Grid::idToPos(int id)
     return pair<int, int>(x, y);
 }
 
+int Grid::nearestNet(pair<int, int> pos)
+{
+
+    auto up = pos;
+    auto down = pos;
+    auto left = pos;
+    auto right = pos;
+
+    while (true)
+    {
+        // cout<<"up "<<up.first<<" "<<up.second<<endl;
+        // cout<<"down "<<down.first<<" "<<down.second<<endl;
+        // cout<<"left "<<left.first<<" "<<left.second<<endl;
+        // cout<<"right "<<right.first<<" "<<right.second<<endl<<endl;
+
+        bool outOfBound = true;
+        if (isInBound(up))
+        {
+            outOfBound = false;
+            if (gridboxes[up.second][up.first].isPath)
+            {
+                return gridboxes[up.second][up.first].netId;
+            }
+            else
+            {
+                up.second += 1;
+            }
+        }
+
+        if (isInBound(down))
+        {
+            outOfBound = false;
+            if (gridboxes[down.second][down.first].isPath)
+            {
+                return gridboxes[down.second][down.first].netId;
+            }
+            else
+            {
+                down.second -= 1;
+            }
+        }
+
+        if (isInBound(left))
+        {
+            outOfBound = false;
+            if (gridboxes[left.second][left.first].isPath)
+            {
+                return gridboxes[left.second][left.first].netId;
+            }
+            else
+            {
+                left.first -= 1;
+            }
+        }
+
+        if (isInBound(right))
+        {
+            outOfBound = false;
+            if (gridboxes[right.second][right.first].isPath)
+            {
+                return gridboxes[right.second][right.first].netId;
+            }
+            else
+            {
+                right.first += 1;
+            }
+        }
+
+        if (outOfBound)
+        {
+            cout<<"return -1";
+            return -1;
+        }
+    }
+}
+
 std::ostream &operator<<(std::ostream &out, const Grid &G)
 {
-    if(G.width > 50 || G.height > 50){
+    if (G.width > 50 || G.height > 50)
+    {
         return out;
     }
     for (int i = 0; i < G.width + 1; i++)
@@ -137,8 +214,9 @@ std::ostream &operator<<(std::ostream &out, const Grid &G)
     for (int i = 0; i < G.width; i++)
     {
         out << " " << i;
-        if(i < 10){
-            out<<" ";
+        if (i < 10)
+        {
+            out << " ";
         }
     }
     out << endl;

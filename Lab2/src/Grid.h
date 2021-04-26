@@ -35,6 +35,7 @@ public:
     int posToId(int x, int y);
     int posToId(pair<int, int> pos);
     pair<int, int> idToPos(int id);
+    int nearestNet(pair<int, int> pos);
 
     // IO
     friend std::ostream &operator<<(std::ostream &out, const Grid &G);
@@ -46,9 +47,7 @@ struct Grid::GridBox
 {
     bool obstacle = false;
     bool isPath = false;
-    int netId;
-
-    string symbol = "";
+    int netId = -1;
 
     vector<GridBox *> path;
 
@@ -61,8 +60,7 @@ struct Grid::GridBox
     void setObstacle();
     void clearObstacle();
     void setPath(int netId);
-    void setSymbol(string str);
-    void setSymbol(char c);
+    void clearPath();
 
 
     bool isObstacle() const;
