@@ -34,6 +34,7 @@ public:
 struct Router::Net
 {
     string name;
+    int id;
     pair<int, int> src;
     pair<int, int> dst;
     int area;
@@ -42,7 +43,7 @@ struct Router::Net
     bool isRouted;
     vector<pair<int, int>> path;
 
-    Net(string name, int srcX, int srcY, int dstX, int dstY);
+    Net(string name, int id, int srcX, int srcY, int dstX, int dstY);
     int calculateArea();
     int calculatePinNum(vector<Net *> nets);
 
@@ -51,6 +52,7 @@ struct Router::Net
     friend std::ostream &operator<<(std::ostream &out, const Router::Net &N)
     {
         out << "name: " << N.name << endl;
+        out << "id: " << N.id << endl;
         out << "src: (" << N.src.first << " " << N.src.second << ")\n";
         out << "dst: (" << N.dst.first << " " << N.dst.second << ")\n";
         out << "area: " << N.area << endl;

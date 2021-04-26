@@ -21,7 +21,7 @@ public:
     void setSize(int height, int width);
     void addBlock(int leftDownX, int leftDownY, int rightUpX, int rightUpY);
     void setObstacle(int x, int y);
-    void setPath(int x, int y);
+    void setPath(int x, int y, int netId);
 
     // Getters
     GridBox *getGridbox(int x, int y);
@@ -46,6 +46,7 @@ struct Grid::GridBox
 {
     bool obstacle = false;
     bool isPath = false;
+    int netId;
 
     string symbol = "";
 
@@ -59,7 +60,7 @@ struct Grid::GridBox
 
     void setObstacle();
     void clearObstacle();
-    void setPath();
+    void setPath(int netId);
     void setSymbol(string str);
     void setSymbol(char c);
 

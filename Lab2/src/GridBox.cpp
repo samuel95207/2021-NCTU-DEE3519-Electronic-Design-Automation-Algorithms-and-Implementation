@@ -22,10 +22,11 @@ void Grid::GridBox::clearObstacle()
     obstacle = false;
 }
 
-void Grid::GridBox::setPath()
+void Grid::GridBox::setPath(int netId_in)
 {
     obstacle = true;
     isPath = true;
+    netId = netId_in;
 }
 
 void Grid::GridBox::setSymbol(string str){
@@ -53,11 +54,7 @@ string Grid::GridBox::toString() const
 {
     if (isPath)
     {
-        if(symbol == ""){
-            return ".";
-        }else{
-            return symbol;
-        }
+        return to_string(netId);
     }
     else if (obstacle)
     {

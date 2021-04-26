@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Router::Net::Net(string name, int srcX, int srcY, int dstX, int dstY) : name(name)
+Router::Net::Net(string name, int id, int srcX, int srcY, int dstX, int dstY) : name(name), id(id)
 {
     src.first = srcX;
     src.second = srcY;

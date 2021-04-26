@@ -25,9 +25,10 @@ void Router::start()
 
 void Router::addNet(string name, int srcX, int srcY, int dstX, int dstY)
 {
-    nets.push_back(new Net(name, srcX, srcY, dstX, dstY));
-    grid->setPath(srcX, srcY);
-    grid->setPath(dstX, dstY);
+    auto net = new Net(name, nets.size(), srcX, srcY, dstX, dstY);
+    nets.push_back(net);
+    grid->setPath(srcX, srcY, net->id);
+    grid->setPath(dstX, dstY, net->id);
 }
 
 void Router::sortNets()
@@ -82,7 +83,7 @@ void Router::astarRouting(Net *net)
             cout << "Find path\n";
             for (auto box : gridbox->path)
             {
-                box->setPath();
+                box->setPath(net->id);
                 box->setSymbol(net->name[3]);
                 net->path.push_back(box->pos);
             }

@@ -43,9 +43,9 @@ void Grid::setObstacle(int x, int y)
     gridboxes[y][x].setObstacle();
 }
 
-void Grid::setPath(int x, int y)
+void Grid::setPath(int x, int y, int netId)
 {
-    gridboxes[y][x].setPath();
+    gridboxes[y][x].setPath(netId);
 }
 
 Grid::GridBox *Grid::getGridbox(int x, int y)
