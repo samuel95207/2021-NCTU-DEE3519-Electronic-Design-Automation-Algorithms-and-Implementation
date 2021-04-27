@@ -42,7 +42,10 @@ void Router::start()
             }
 
             cout << "Stuck at (" << result.second->pos.first << ", " << result.second->pos.second << ")" << endl;
-            int id = grid->nearestNet(result.second->pos);
+            int id = -1;
+            while(id == -1){
+                id = grid->nearestNet(result.second->pos);
+            }
             auto demolishnet = nets[id];
             demolishNet(demolishnet);
             cout << *grid << endl;

@@ -130,6 +130,8 @@ int Grid::nearestNet(pair<int, int> pos)
 
         bool outOfBound = true;
 
+        int random = rand() % 3;
+
         for (auto i : order)
         {
             if (i == 0)
@@ -137,7 +139,7 @@ int Grid::nearestNet(pair<int, int> pos)
                 if (isInBound(up))
                 {
                     outOfBound = false;
-                    if (gridboxes[up.second][up.first].isPath)
+                    if (gridboxes[up.second][up.first].isPath && !random)
                     {
                         return gridboxes[up.second][up.first].netId;
                     }
@@ -152,7 +154,7 @@ int Grid::nearestNet(pair<int, int> pos)
                 if (isInBound(down))
                 {
                     outOfBound = false;
-                    if (gridboxes[down.second][down.first].isPath)
+                    if (gridboxes[down.second][down.first].isPath && !random)
                     {
                         return gridboxes[down.second][down.first].netId;
                     }
@@ -167,7 +169,7 @@ int Grid::nearestNet(pair<int, int> pos)
                 if (isInBound(left))
                 {
                     outOfBound = false;
-                    if (gridboxes[left.second][left.first].isPath)
+                    if (gridboxes[left.second][left.first].isPath && !random)
                     {
                         return gridboxes[left.second][left.first].netId;
                     }
@@ -182,7 +184,7 @@ int Grid::nearestNet(pair<int, int> pos)
                 if (isInBound(right))
                 {
                     outOfBound = false;
-                    if (gridboxes[right.second][right.first].isPath)
+                    if (gridboxes[right.second][right.first].isPath && !random)
                     {
                         return gridboxes[right.second][right.first].netId;
                     }
