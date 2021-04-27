@@ -1,6 +1,8 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <cstdlib>
+#include <algorithm>
 
 #include "Grid.h"
 
@@ -111,11 +113,13 @@ pair<int, int> Grid::idToPos(int id)
 
 int Grid::nearestNet(pair<int, int> pos)
 {
-
     auto up = pos;
     auto down = pos;
     auto left = pos;
     auto right = pos;
+
+    vector<int> order = {0, 1, 2, 3};
+    random_shuffle(order.begin(), order.end());
 
     while (true)
     {
@@ -125,61 +129,74 @@ int Grid::nearestNet(pair<int, int> pos)
         // cout<<"right "<<right.first<<" "<<right.second<<endl<<endl;
 
         bool outOfBound = true;
-        if (isInBound(up))
-        {
-            outOfBound = false;
-            if (gridboxes[up.second][up.first].isPath)
-            {
-                return gridboxes[up.second][up.first].netId;
-            }
-            else
-            {
-                up.second += 1;
-            }
-        }
 
-        if (isInBound(down))
+        for (auto i : order)
         {
-            outOfBound = false;
-            if (gridboxes[down.second][down.first].isPath)
+            if (i == 0)
             {
-                return gridboxes[down.second][down.first].netId;
+                if (isInBound(up))
+                {
+                    outOfBound = false;
+                    if (gridboxes[up.second][up.first].isPath)
+                    {
+                        return gridboxes[up.second][up.first].netId;
+                    }
+                    else
+                    {
+                        up.second += 1;
+                    }
+                }
             }
-            else
+            else if (i == 1)
             {
-                down.second -= 1;
+                if (isInBound(down))
+                {
+                    outOfBound = false;
+                    if (gridboxes[down.second][down.first].isPath)
+                    {
+                        return gridboxes[down.second][down.first].netId;
+                    }
+                    else
+                    {
+                        down.second -= 1;
+                    }
+                }
             }
-        }
-
-        if (isInBound(left))
-        {
-            outOfBound = false;
-            if (gridboxes[left.second][left.first].isPath)
+            else if (i == 2)
             {
-                return gridboxes[left.second][left.first].netId;
+                if (isInBound(left))
+                {
+                    outOfBound = false;
+                    if (gridboxes[left.second][left.first].isPath)
+                    {
+                        return gridboxes[left.second][left.first].netId;
+                    }
+                    else
+                    {
+                        left.first -= 1;
+                    }
+                }
             }
-            else
+            else if (i == 3)
             {
-                left.first -= 1;
-            }
-        }
-
-        if (isInBound(right))
-        {
-            outOfBound = false;
-            if (gridboxes[right.second][right.first].isPath)
-            {
-                return gridboxes[right.second][right.first].netId;
-            }
-            else
-            {
-                right.first += 1;
+                if (isInBound(right))
+                {
+                    outOfBound = false;
+                    if (gridboxes[right.second][right.first].isPath)
+                    {
+                        return gridboxes[right.second][right.first].netId;
+                    }
+                    else
+                    {
+                        right.first += 1;
+                    }
+                }
             }
         }
 
         if (outOfBound)
         {
-            cout<<"return -1";
+            cout << "return -1";
             return -1;
         }
     }

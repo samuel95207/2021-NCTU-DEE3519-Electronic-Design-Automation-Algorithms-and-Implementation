@@ -34,6 +34,7 @@ void Router::start()
 
         while (true)
         {
+            cout << "Routing " << net->name << endl;
             auto result = astarRouting(net);
             if (result.first)
             {
@@ -44,7 +45,9 @@ void Router::start()
             int id = grid->nearestNet(result.second->pos);
             auto demolishnet = nets[id];
             demolishNet(demolishnet);
+            cout << *grid << endl;
             priorityQueue.push(demolishnet);
+            // return;
         }
     }
 }
@@ -74,8 +77,8 @@ void Router::demolishNet(Net *net)
     {
         grid->getGridbox(pos)->clearPath();
     }
-    grid->getGridbox(net->src)->setPath(net->id);
-    grid->getGridbox(net->dst)->setPath(net->id);
+    grid->getGridbox(net->src)->setObstacle();
+    grid->getGridbox(net->dst)->setObstacle();
 
     net->path.clear();
     net->isRouted = false;
@@ -142,6 +145,7 @@ pair<bool, Grid::GridBox *> Router::astarRouting(Net *net)
 
         if (heuristic(gridbox) < minDistance)
         {
+            minDistance = heuristic(gridbox);
             nearestGridbox = gridbox;
         }
 
@@ -173,6 +177,7 @@ pair<bool, Grid::GridBox *> Router::astarRouting(Net *net)
     }
 
     cout << "Cannot find path\n";
+    grid->getGridbox(net->dst)->setObstacle();
     return pair<bool, Grid::GridBox *>(false, nearestGridbox);
 }
 
