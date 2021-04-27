@@ -66,7 +66,7 @@ void Router::buildNet(Net *net, Grid::GridBox *dst)
     while (pathGrid != nullptr)
     {
         pathGrid->setPath(net->id);
-        net->path.insert(net->path.begin(),pathGrid->pos);
+        net->path.insert(net->path.begin(), pathGrid->pos);
         pathGrid = pathGrid->parent;
     }
     net->isRouted = true;
@@ -116,7 +116,8 @@ pair<bool, Grid::GridBox *> Router::astarRouting(Net *net)
 
     // priorityQueue
     auto cmp = [&](Grid::GridBox *a, Grid::GridBox *b) {
-        return ((double(a->cost) + heuristic(a)) > (double(b->cost) + heuristic(b)));
+        // return ((double(a->cost) + heuristic(a)) > (double(b->cost) + heuristic(b)));
+        return (heuristic(a) > heuristic(b));
     };
     priority_queue<Grid::GridBox *, std::vector<Grid::GridBox *>, decltype(cmp)> priorityQueue(cmp);
 
@@ -131,15 +132,19 @@ pair<bool, Grid::GridBox *> Router::astarRouting(Net *net)
 
     int minDistance = INT_MAX;
 
+    int count = 0;
+
     // start iteration
     while (priorityQueue.size() != 0)
     {
+        count++;
         auto gridbox = priorityQueue.top();
         priorityQueue.pop();
 
         if (gridbox->getPos() == net->dst)
         {
             cout << "Find path\n";
+            cout << "Check " << count << " blocks" << endl;
             buildNet(net, gridbox);
             cout << *grid;
             return pair<bool, Grid::GridBox *>(true, nearestGridbox);
