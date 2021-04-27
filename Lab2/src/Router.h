@@ -23,7 +23,7 @@ public:
 
     void addNet(string name, int srcX, int srcY, int dstX, int dstY);
 
-    void buildNet(Net *net, std::vector<Grid::GridBox *> &path);
+    void buildNet(Net *net, Grid::GridBox * dst);
     void demolishNet(Net *net);
 
     void sortNets();

@@ -60,12 +60,14 @@ void Router::addNet(string name, int srcX, int srcY, int dstX, int dstY)
     grid->setObstacle(dstX, dstY);
 }
 
-void Router::buildNet(Net *net, std::vector<Grid::GridBox *> &path)
+void Router::buildNet(Net *net, Grid::GridBox *dst)
 {
-    for (auto box : path)
+    auto pathGrid = dst;
+    while (pathGrid != nullptr)
     {
-        box->setPath(net->id);
-        net->path.push_back(box->pos);
+        pathGrid->setPath(net->id);
+        net->path.insert(net->path.begin(),pathGrid->pos);
+        pathGrid = pathGrid->parent;
     }
     net->isRouted = true;
     cout << "Build net " << net->name << endl;
@@ -121,7 +123,7 @@ pair<bool, Grid::GridBox *> Router::astarRouting(Net *net)
     // Push the src into priority queue
     auto srcGridbox = grid->getGridbox(net->src);
     srcGridbox->cost = 0;
-    srcGridbox->path.push_back(srcGridbox);
+    srcGridbox->parent = nullptr;
     priorityQueue.push(srcGridbox);
 
     // Set dst terminal to not obstacle
@@ -138,7 +140,7 @@ pair<bool, Grid::GridBox *> Router::astarRouting(Net *net)
         if (gridbox->getPos() == net->dst)
         {
             cout << "Find path\n";
-            buildNet(net, gridbox->path);
+            buildNet(net, gridbox);
             cout << *grid;
             return pair<bool, Grid::GridBox *>(true, nearestGridbox);
         }
@@ -165,8 +167,7 @@ pair<bool, Grid::GridBox *> Router::astarRouting(Net *net)
             if (reachGridbox == nullptr || adjGridbox->cost < reachGridbox->cost)
             {
                 adjGridbox->cost = gridbox->cost + 1;
-                adjGridbox->path = gridbox->path;
-                adjGridbox->path.push_back(adjGridbox);
+                adjGridbox->parent = gridbox;
 
                 reachedGridboxes[id] = adjGridbox;
                 priorityQueue.push(adjGridbox);

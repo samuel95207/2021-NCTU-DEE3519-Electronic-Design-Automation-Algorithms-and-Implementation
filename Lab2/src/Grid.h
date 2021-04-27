@@ -49,7 +49,7 @@ struct Grid::GridBox
     bool isPath = false;
     int netId = -1;
 
-    vector<GridBox *> path;
+    GridBox * parent;
 
     pair<int, int> pos;
     int cost = INT_MAX;
