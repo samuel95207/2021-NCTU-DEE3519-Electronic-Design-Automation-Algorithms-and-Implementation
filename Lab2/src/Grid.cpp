@@ -198,7 +198,6 @@ int Grid::nearestNet(pair<int, int> pos)
 
         if (outOfBound)
         {
-            cout << "return -1";
             return -1;
         }
     }
