@@ -34,7 +34,7 @@ void Router::start()
 
         while (true)
         {
-            cout << "Routing " << net->name << endl;
+            cout << endl << "Routing " << net->name << endl;
             auto result = astarRouting(net);
             if (result.first)
             {
@@ -47,7 +47,6 @@ void Router::start()
             demolishNet(demolishnet);
             cout << *grid << endl;
             priorityQueue.push(demolishnet);
-            // return;
         }
     }
 }
