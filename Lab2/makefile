@@ -65,6 +65,10 @@ case4:
 	@make
 	@./bin/0710764_lab2.o ./inputs/case4/case4.in ./outputs/case4.out
 
+case5:
+	@make
+	@./bin/0710764_lab2.o ./inputs/case5/case5.in ./outputs/case5.out
+
 zip:
 	@make clean
 	@make
