@@ -42,14 +42,26 @@ void Router::start()
             }
 
             cout << "Stuck at (" << result.second->pos.first << ", " << result.second->pos.second << ")" << endl;
-            int id = -1;
-            while(id == -1){
-                id = grid->nearestNet(result.second->pos);
-            }
-            auto demolishnet = nets[id];
-            demolishNet(demolishnet);
+            // int id = -1;
+            // while(id == -1){
+            //     id = grid->nearestNet(result.second->pos);
+            // }
+            // auto demolishnet = nets[id];
+            // demolishNet(demolishnet);
+            // cout << *grid << endl;
+            // priorityQueue.push(demolishnet);
+            
+            int id;
+            Router::Net * demolishnet;
+
+            do{
+                id = rand()%nets.size();
+                demolishnet = nets[id];
+            }while(!demolishNet(demolishnet));
             cout << *grid << endl;
+            demolishnet->pinNum = 50000;
             priorityQueue.push(demolishnet);
+
         }
     }
 }
@@ -75,8 +87,11 @@ void Router::buildNet(Net *net, Grid::GridBox *dst)
     cout << "Build net " << net->name << endl;
 }
 
-void Router::demolishNet(Net *net)
+bool Router::demolishNet(Net *net)
 {
+    if(!net->isRouted){
+        return false;
+    }
     for (auto pos : net->path)
     {
         grid->getGridbox(pos)->clearPath();
@@ -87,6 +102,7 @@ void Router::demolishNet(Net *net)
     net->path.clear();
     net->isRouted = false;
     cout << "Demolish net " << net->name << endl;
+    return true;
 }
 
 void Router::sortNets()

@@ -24,7 +24,7 @@ public:
     void addNet(string name, int srcX, int srcY, int dstX, int dstY);
 
     void buildNet(Net *net, Grid::GridBox * dst);
-    void demolishNet(Net *net);
+    bool demolishNet(Net *net);
 
     void sortNets();
 
