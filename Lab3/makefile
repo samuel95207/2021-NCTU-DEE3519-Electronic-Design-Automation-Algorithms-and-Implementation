@@ -4,21 +4,25 @@ SRC_DIR = ./src
 SRC_SUBDIR += . 
 INCLUDE_DIR += ./src
 OBJ_DIR = ./src/obj
-CUDD_DIR = ./packages/cudd-3.0.0
 
 CC = g++
 C_FLAGS = -g -Wall -std=c++11 -O3
 
+# CUDD
+CUDD_DIR = ./packages/cudd-3.0.0
+CUDD_INCLUDE = 	-I $(CUDD_DIR)/cudd \
+				-I $(CUDD_DIR)/util \
+				-I $(CUDD_DIR)
+CUDD_LIB = $(CUDD_DIR)/cudd/.libs/libcudd.a
+CUDD_FLAGS = -lm
+
 
 LD = $(CC)
-INCLUDES += -I$(INCLUDE_DIR)
-LD_FLAFS += 
-LD_LIBS =
-CUDD_LIB = 	-I $(CUDD_DIR)/cudd \
-			-I $(CUDD_DIR)/util \
-			-I $(CUDD_DIR) \
-			$(CUDD_DIR)/cudd/.libs/libcudd.a \
-			- lm
+INCLUDES += -I $(INCLUDE_DIR)
+INCLUDES += $(CUDD_INCLUDE)
+		
+LD_FLAFS += $(CUDD_FLAGS)
+LD_LIBS += $(CUDD_LIB)
 
 ifeq ($(CC), g++)
 	TYPE = cpp
@@ -44,7 +48,7 @@ $(TARGET) : $(OBJS)
 $(OBJS) : $(OBJ_DIR)/%.o:%.$(TYPE)
 	@mkdir -p $(@D)
 	@echo "Compiling" $@ "from" $< "..."
-	$(CC) -c -o $@ $< $(C_FLAGS) $(INCLUDES)  
+	$(CC) -c -o $@ $< $(C_FLAGS) $(INCLUDES) $(CUDD_LIB)
 	@echo "Compile finished"
 
 .PHONY : clean cleanobj
