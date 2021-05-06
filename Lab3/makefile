@@ -8,12 +8,16 @@ CUDD_DIR = ./packages/cudd-3.0.0
 
 CC = g++
 C_FLAGS = -g -Wall -std=c++11 -O3
-CUDD_FLAGS = -I $(CUDD_DIR)/cudd -I $(CUDD_DIR)/util -I $(CUDD_DIR) $(CUDD_DIR)/cudd/.libs/libcudd.a
+
 
 LD = $(CC)
 INCLUDES += -I$(INCLUDE_DIR)
 LD_FLAFS += 
 LD_LIBS =
+CUDD_LIB = 	-I $(CUDD_DIR)/cudd \
+				-I $(CUDD_DIR)/util \
+				-I $(CUDD_DIR) \
+				$(CUDD_DIR)/cudd/.libs/libcudd.a
 
 ifeq ($(CC), g++)
 	TYPE = cpp
@@ -33,13 +37,13 @@ all : $(TARGET)
 $(TARGET) : $(OBJS)
 	@mkdir -p $(@D)
 	@echo "Linking" $@ "from" $^ "..."
-	$(LD) -o $@ $^ $(LD_FLAGS) $(LD_LIBS)
+	$(LD) -o $@ $^ $(LD_FLAGS) $(LD_LIBS) $(CUDD_LIB) 
 	@echo "Link finished"
 
 $(OBJS) : $(OBJ_DIR)/%.o:%.$(TYPE)
 	@mkdir -p $(@D)
 	@echo "Compiling" $@ "from" $< "..."
-	$(CC) -c -o $@ $< $(C_FLAGS) $(CUDD_FLAGS) $(INCLUDES)  
+	$(CC) -c -o $@ $< $(C_FLAGS) $(INCLUDES)  
 	@echo "Compile finished"
 
 .PHONY : clean cleanobj
