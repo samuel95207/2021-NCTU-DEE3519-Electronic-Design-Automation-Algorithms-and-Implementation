@@ -15,9 +15,10 @@ INCLUDES += -I$(INCLUDE_DIR)
 LD_FLAFS += 
 LD_LIBS =
 CUDD_LIB = 	-I $(CUDD_DIR)/cudd \
-				-I $(CUDD_DIR)/util \
-				-I $(CUDD_DIR) \
-				$(CUDD_DIR)/cudd/.libs/libcudd.a
+			-I $(CUDD_DIR)/util \
+			-I $(CUDD_DIR) \
+			$(CUDD_DIR)/cudd/.libs/libcudd.a \
+			- lm
 
 ifeq ($(CC), g++)
 	TYPE = cpp
