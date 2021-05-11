@@ -101,7 +101,7 @@ public:
 
         ifstream mintermFile(tmpFilename);
 
-        double probability = 0;
+        probability = 0;
 
         string line;
         while (getline(mintermFile, line))
@@ -112,7 +112,7 @@ public:
             iss.str(line);
             iss >> minterm;
 
-            // cerr<<minterm<<endl;
+            cerr<<minterm<<endl;
 
             double probability_tmp = 1;
             int size = minterm.size();
