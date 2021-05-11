@@ -71,7 +71,7 @@ case2:
 
 case3:
 	@make
-	@./bin/Lab3 ./inputs/input2.txt ./outputs/output3.out
+	@./bin/Lab3 ./inputs/input3.txt ./outputs/output3.out
 
 zip:
 	@make clean
