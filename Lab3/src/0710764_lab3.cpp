@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <unistd.h>
 
 #include "util.h"
 #include "cudd.h"
@@ -16,6 +17,9 @@ class BDDInterfacec
     DdNode *bdd;
     unordered_map<char, DdNode *> nodeMap;
     unordered_map<char, double> probabilityMap;
+    unordered_map<int, char> inputOrderMap;
+
+    double probability;
 
 public:
     BDDInterfacec()
@@ -31,6 +35,8 @@ public:
 
     void setBooleanFunction(string &str)
     {
+        int count = 0;
+
         DdNode *and_tmp = Cudd_ReadOne(gbm);
         Cudd_Ref(and_tmp);
         DdNode *or_tmp = Cudd_ReadLogicZero(gbm);
@@ -46,6 +52,9 @@ public:
                     DdNode *neg_var = Cudd_Not(var);
                     nodeMap[tolower(c)] = var;
                     nodeMap[toupper(c)] = neg_var;
+
+                    inputOrderMap[count] = tolower(c);
+                    count++;
                 }
 
                 DdNode *var = nodeMap[c];
@@ -57,7 +66,7 @@ public:
             }
             else if (c == '+')
             {
-                DdNode *tmp = Cudd_bddOr(gbm, or_tmp, and_tmp);
+                DdNode *tmp = Cudd_bddOr(gbm, and_tmp, or_tmp);
                 Cudd_Ref(tmp);
                 Cudd_RecursiveDeref(gbm, or_tmp);
                 or_tmp = tmp;
@@ -66,18 +75,72 @@ public:
                 Cudd_Ref(and_tmp);
             }
         }
-        DdNode *tmp = Cudd_bddOr(gbm, or_tmp, and_tmp);
+        DdNode *tmp = Cudd_bddOr(gbm, and_tmp, or_tmp);
         Cudd_Ref(tmp);
         Cudd_RecursiveDeref(gbm, or_tmp);
+        Cudd_RecursiveDeref(gbm, and_tmp);
 
         bdd = tmp;
-
-
     }
 
     void setProbability(char c, double probability)
     {
         probabilityMap[c] = probability;
+    }
+
+    double calculateProbability(string tmpFilename)
+    {
+        auto saveSTDOUT = dup(STDOUT_FILENO);
+        auto fp = freopen(tmpFilename.c_str(), "w", stdout);
+
+        Cudd_PrintMinterm(gbm, bdd);
+
+        fclose(fp);
+        fclose(stdout);
+        stdout = fdopen(saveSTDOUT, "w");
+
+        ifstream mintermFile(tmpFilename);
+
+        double probability = 0;
+
+        string line;
+        while (getline(mintermFile, line))
+        {
+            istringstream iss;
+            string minterm;
+
+            iss.str(line);
+            iss >> minterm;
+
+            // cerr<<minterm<<endl;
+
+            double probability_tmp = 1;
+            int size = minterm.size();
+            for (int i = 0; i < size; i++)
+            {
+                char c = minterm[i];
+                if (c == '1')
+                {
+                    probability_tmp *= probabilityMap[inputOrderMap[i]];  
+                }
+                else if (c == '0')
+                {
+                    probability_tmp *= 1 - probabilityMap[inputOrderMap[i]];   
+                }
+            }
+            probability += probability_tmp;
+        }
+
+        cerr<<probability<<endl;
+
+        mintermFile.close();
+
+        // clear trace in output file
+        ofstream clearFile(tmpFilename);
+        clearFile<<"";
+        clearFile.close();
+
+        return probability;
     }
 
     void printBDD(int n, int pr = 4)
@@ -101,6 +164,17 @@ public:
         cout << "}\n";
     }
 
+    void printVariables()
+    {
+        cout << "{\n";
+        for (auto item : inputOrderMap)
+        {
+            cout << "  " << item.first << ": " << item.second << endl;
+        }
+        cout << "}\n";
+        Cudd_PrintMinterm(gbm, bdd);
+    }
+
     void outputGraphFile(char *filename)
     {
         DdNode *add = Cudd_BddToAdd(gbm, bdd);
@@ -109,6 +183,7 @@ public:
         DdNode **ddnodearray = (DdNode **)malloc(sizeof(DdNode *)); // initialize the function array
         ddnodearray[0] = add;
         Cudd_DumpDot(gbm, 1, ddnodearray, NULL, NULL, outfile); // dump the function to .dot file
+
         free(ddnodearray);
         fclose(outfile); // close the file */
     }
@@ -128,10 +203,16 @@ public:
             istringstream iss;
             iss.str(line);
             iss >> c >> probability;
-            BDD.setProbability(c, probability);
+            BDD.setProbability(tolower(c), probability);
         }
 
         return in;
+    }
+
+    friend std::ostream &operator<<(std::ostream &out, const BDDInterfacec &BDD)
+    {
+        out<<BDD.probability;
+        return out;
     }
 };
 
@@ -139,10 +220,18 @@ int main(int argc, char *argv[])
 {
     BDDInterfacec BDD;
     ifstream infile(argv[1]);
-
     infile >> BDD;
+    infile.close();
 
-    BDD.printProbabilityMap();
-    BDD.printBDD(2);
-    BDD.outputGraphFile("graph.dot");
+    // BDD.printProbabilityMap();
+    // BDD.printBDD(2, 4);
+    // BDD.printVariables();
+    // BDD.outputGraphFile("graph.dot");
+
+    BDD.calculateProbability(argv[2]);
+
+
+    ofstream outfile(argv[2]);
+    outfile<<BDD;
+
 }
