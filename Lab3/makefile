@@ -67,7 +67,7 @@ case1:
 
 case2:
 	@make
-	@./bin/Lab3 ./inputs/input2.txt ./outputs/output3.out
+	@./bin/Lab3 ./inputs/input2.txt ./outputs/output2.out
 
 case3:
 	@make
