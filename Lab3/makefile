@@ -48,7 +48,7 @@ $(TARGET) : $(OBJS)
 $(OBJS) : $(OBJ_DIR)/%.o:%.$(TYPE)
 	@mkdir -p $(@D)
 	@echo "Compiling" $@ "from" $< "..."
-	$(CC) -c -o $@ $< $(C_FLAGS) $(INCLUDES) $(CUDD_LIB)
+	$(CC) -c -o $@ $< $(C_FLAGS) $(INCLUDES)
 	@echo "Compile finished"
 
 .PHONY : clean cleanobj
@@ -82,13 +82,6 @@ zip:
 	@make
 	@rm -rf ./src/obj/*
 	@rm -f 0710764.zip
-	@mkdir 0710764
-	@cp -r src 0710764/src
-	@cp -r makefile 0710764/makefile
-	@mkdir 0710764/bin
-	@cp -r bin/0710764_lab2.o 0710764/bin/0710764_lab2.o 
-	@cp -r README.md 0710764/README.md
-	@zip -r 0710764.zip 0710764
-	@rm -rf 0710764
+	@zip -r 0710764.zip ./bin/Lab3 src ./packages makefile README.md 
 
 
