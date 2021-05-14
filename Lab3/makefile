@@ -73,6 +73,10 @@ case3:
 	@make
 	@./bin/Lab3 ./inputs/input3.txt ./outputs/output3.out
 
+bigcase:
+	@make
+	@./bin/Lab3 ./inputs/bigcase.txt ./outputs/bigcase.out
+
 zip:
 	@make clean
 	@make
