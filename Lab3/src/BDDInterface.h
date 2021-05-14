@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 class BDDInterfacec
 {
     DdManager *gbm;

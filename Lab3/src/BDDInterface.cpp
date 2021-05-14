@@ -84,6 +84,7 @@ double BDDInterfacec::calculateProbability(string tmpFilename)
 
     probability = 0;
 
+    cerr << "Minterms:" << endl;
     string line;
     while (getline(mintermFile, line))
     {
@@ -111,6 +112,7 @@ double BDDInterfacec::calculateProbability(string tmpFilename)
         }
         probability += probability_tmp;
     }
+    cerr << endl;
 
     mintermFile.close();
 
@@ -199,6 +201,6 @@ std::ostream &operator<<(std::ostream &out, const BDDInterfacec &BDD)
 {
     out << fixed;
     out << setprecision(3);
-    out << round(BDD.probability*1000)/1000;
+    out << round(BDD.probability * 1000) / 1000;
     return out;
 }
