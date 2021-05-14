@@ -1,5 +1,8 @@
 #include "BDDInterface.h"
 
+#include <cmath>
+#include <iomanip>
+
 BDDInterfacec::BDDInterfacec()
 {
     gbm = Cudd_Init(0, 0, CUDD_UNIQUE_SLOTS, CUDD_CACHE_SLOTS, 0);
@@ -109,8 +112,6 @@ double BDDInterfacec::calculateProbability(string tmpFilename)
         probability += probability_tmp;
     }
 
-    cerr << probability << endl;
-
     mintermFile.close();
 
     // clear trace in output file
@@ -196,6 +197,8 @@ std::istream &operator>>(std::istream &in, BDDInterfacec &BDD)
 
 std::ostream &operator<<(std::ostream &out, const BDDInterfacec &BDD)
 {
-    out << BDD.probability;
+    out << fixed;
+    out << setprecision(3);
+    out << round(BDD.probability*1000)/1000;
     return out;
 }

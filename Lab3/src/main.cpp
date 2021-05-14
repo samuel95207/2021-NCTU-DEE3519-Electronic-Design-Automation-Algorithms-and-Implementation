@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
 
     BDD.calculateProbability(argv[2]);
 
+    cerr<<BDD<<endl;
 
     ofstream outfile(argv[2]);
     outfile<<BDD;
