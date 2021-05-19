@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     // BDD.printVariables();
     // BDD.writeGraphFile("graph.dot");
 
-    BDD.calculateProbability(argv[2]);
+    BDD.calculateProbability();
 
     cerr << "Probability:\n"
          << BDD << endl;

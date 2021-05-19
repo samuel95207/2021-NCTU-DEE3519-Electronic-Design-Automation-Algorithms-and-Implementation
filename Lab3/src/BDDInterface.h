@@ -28,7 +28,8 @@ public:
     void setBooleanFunction(string &str);
     void setProbability(char c, double probability);
 
-    double calculateProbability(string tmpFilename);
+    double calculateProbability();
+    double calculateProbability_minterm(string tmpFilename);
 
     void printBDD(int n, int pr);
     void printProbabilityMap();

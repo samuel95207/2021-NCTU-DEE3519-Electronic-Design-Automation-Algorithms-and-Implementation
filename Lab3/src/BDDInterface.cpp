@@ -69,7 +69,20 @@ void BDDInterfacec::setProbability(char c, double probability)
     probabilityMap[c] = probability;
 }
 
-double BDDInterfacec::calculateProbability(string tmpFilename)
+double BDDInterfacec::calculateProbability()
+{
+    int varNum = inputOrderMap.size();
+    double * probabilityArr = new double[varNum];
+    for(int i = 0;i < varNum; i++){
+        probabilityArr[i] = probabilityMap[inputOrderMap[i]];
+    }
+
+    probability = Cudd_bddCorrelationWeights(gbm, bdd, Cudd_ReadOne(gbm), probabilityArr);
+
+    return probability;
+}
+
+double BDDInterfacec::calculateProbability_minterm(string tmpFilename)
 {
     auto saveSTDOUT = dup(STDOUT_FILENO);
     auto fp = freopen(tmpFilename.c_str(), "w", stdout);
