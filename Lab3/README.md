@@ -4,5 +4,5 @@ The program needs CUDD package to compile, so "cudd-3.0.0" has to be inside pack
 ```
 make
 cd bin
-./lab3 [input] [output]
+./Lab3 [input] [output]
 ```
