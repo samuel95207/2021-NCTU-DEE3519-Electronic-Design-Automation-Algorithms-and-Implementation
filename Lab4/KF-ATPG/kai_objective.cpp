@@ -125,7 +125,9 @@ void AtpgObj::BuildFromPath_NR(PATH *pptr)
 		{
 			for (int j = 0; j < CurG->NoFanin(); j++)
 			{
-				if (CurG->Fanin(j) == PreG)
+				auto fanin = CurG->Fanin(j);
+				
+				if (fanin == PreG)
 				{
 					continue;
 				}
@@ -143,11 +145,11 @@ void AtpgObj::BuildFromPath_NR(PATH *pptr)
 
 					if (PreT == R)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else if (PreT == F)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else
 					{
@@ -168,11 +170,11 @@ void AtpgObj::BuildFromPath_NR(PATH *pptr)
 
 					if (PreT == R)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else if (PreT == F)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else
 					{
@@ -193,11 +195,11 @@ void AtpgObj::BuildFromPath_NR(PATH *pptr)
 
 					if (PreT == R)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else if (PreT == F)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else
 					{
@@ -218,11 +220,11 @@ void AtpgObj::BuildFromPath_NR(PATH *pptr)
 
 					if (PreT == R)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else if (PreT == F)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else
 					{
@@ -322,10 +324,13 @@ void AtpgObj::BuildFromPath_R(PATH *pptr)
 		{
 			for (int j = 0; j < CurG->NoFanin(); j++)
 			{
-				if (CurG->Fanin(j) == PreG)
+				auto fanin = CurG->Fanin(j);
+
+				if (fanin == PreG)
 				{
 					continue;
 				}
+
 
 				switch (CurG->GetFunction())
 				{
@@ -340,12 +345,12 @@ void AtpgObj::BuildFromPath_R(PATH *pptr)
 
 					if (PreT == R)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else if (PreT == F)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 0), ncv);
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 0), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else
 					{
@@ -366,12 +371,12 @@ void AtpgObj::BuildFromPath_R(PATH *pptr)
 
 					if (PreT == R)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else if (PreT == F)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 0), ncv);
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 0), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else
 					{
@@ -392,12 +397,12 @@ void AtpgObj::BuildFromPath_R(PATH *pptr)
 
 					if (PreT == R)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 0), ncv);
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 0), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else if (PreT == F)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else
 					{
@@ -418,12 +423,12 @@ void AtpgObj::BuildFromPath_R(PATH *pptr)
 
 					if (PreT == R)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 0), ncv);
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 0), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else if (PreT == F)
 					{
-						AddObj(ToCUTName(CurG->Fanin(j), 1), ncv);
+						AddObj(ToCUTName(fanin, 1), ncv);
 					}
 					else
 					{
