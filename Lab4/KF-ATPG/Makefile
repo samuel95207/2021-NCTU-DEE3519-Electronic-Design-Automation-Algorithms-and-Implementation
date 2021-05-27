@@ -68,3 +68,16 @@ lexbench.cpp: lexbench.l Makefile
 
 clean:
 	rm *.o readbench.cpp lexbench.cpp readbench.tab.h $(TARGET)
+
+case1:
+	@make
+	@./KF_ATPG -atpg R -cir ../inputs/c17.bench -path_not ../inputs/c17.path_not -output ../outputs/c17_R.pttn
+	@./KF_ATPG -atpg NR -cir ../inputs/c17.bench -path_not ../inputs/c17.path_not -output ../outputs/c17_NR.pttn
+
+
+case2:
+	@make
+	@./KF_ATPG -atpg R -cir ../inputs/s27.bench -path_not ../inputs/s27.path_not -output ../outputs/s27_R.pttn
+	@./KF_ATPG -atpg NR -cir ../inputs/s27.bench -path_not ../inputs/s27.path_not -output ../outputs/s27_NR.pttn
+
+
