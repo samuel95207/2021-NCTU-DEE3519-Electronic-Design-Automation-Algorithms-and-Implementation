@@ -73,11 +73,15 @@ case1:
 	@make
 	@./KF_ATPG -atpg R -cir ../inputs/c17.bench -path_not ../inputs/c17.path_not -output ../outputs/c17_R.pttn
 	@./KF_ATPG -atpg NR -cir ../inputs/c17.bench -path_not ../inputs/c17.path_not -output ../outputs/c17_NR.pttn
+	@./util/checker -robust -checkEDAPattern -givenPath ../inputs/c17.path_not -input ../outputs/c17_R.pttn ../inputs/c17.bench
+	@./util/checker -nonrobust -checkEDAPattern -givenPath ../inputs/c17.path_not -input ../outputs/c17_NR.pttn ../inputs/c17.bench
 
 
 case2:
 	@make
 	@./KF_ATPG -atpg R -cir ../inputs/s27.bench -path_not ../inputs/s27.path_not -output ../outputs/s27_R.pttn
 	@./KF_ATPG -atpg NR -cir ../inputs/s27.bench -path_not ../inputs/s27.path_not -output ../outputs/s27_NR.pttn
+	@./util/checker -robust -checkEDAPattern -givenPath ../inputs/s27.path_not -input ../outputs/s27_R.pttn ../inputs/s27.bench
+	@./util/checker -nonrobust -checkEDAPattern -givenPath ../inputs/s27.path_not -input ../outputs/s27_NR.pttn ../inputs/s27.bench
 
 
